@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/auth/bloc/auth_bloc.dart';
-import 'package:task_managment_bloc/features/auth/view/signup/signup_view.dart';
+
 import '../../../utils/constants/my_colors.dart';
+import '../bloc/auth_bloc.dart';
+import 'login/login_view.dart';
 
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
@@ -24,7 +25,7 @@ class _AuthViewState extends State<AuthView> {
       listener: (context, state) {
         if (state is AuthLoadingState) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const SignupView()));
+              MaterialPageRoute(builder: (context) => const LoginView()));
         }
       },
       builder: (context, state) {
