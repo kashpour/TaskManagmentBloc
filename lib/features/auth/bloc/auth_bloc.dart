@@ -12,6 +12,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthNavigateToLoginPressedEvent>(_authNavigateToLoginPressedEvent);
     on<AuthNavigateToSignupPressedEvent>(_authNavigateToSignupPressedEvent);
   }
+  FutureOr<void> _authInitialEvent(event, Emitter<AuthState> emit) async {
+    emit(AuthInitialState());
+    await Future.delayed(const Duration(seconds: 2));
+    emit(AuthLoadingState());
+  }
 
   FutureOr<void> _authNavigateToLoginPressedEvent(
       AuthNavigateToLoginPressedEvent event, Emitter<AuthState> emit) {
@@ -21,11 +26,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _authNavigateToSignupPressedEvent(
       AuthNavigateToSignupPressedEvent event, Emitter<AuthState> emit) {
     emit(AuthNavigateToSignupState());
-  }
-
-  FutureOr<void> _authInitialEvent(event, Emitter<AuthState> emit) async {
-    emit(AuthInitialState());
-    await Future.delayed(const Duration(seconds: 2));
-    emit(AuthLoadingState());
   }
 }

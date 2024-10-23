@@ -24,8 +24,11 @@ class _AuthViewState extends State<AuthView> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoadingState) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const LoginView()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LoginView(),
+                  fullscreenDialog: true));
         }
       },
       builder: (context, state) {
