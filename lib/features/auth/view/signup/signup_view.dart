@@ -23,6 +23,8 @@ class SignupView extends StatelessWidget {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginView()));
         } else if (state is AuthSignupState) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('You Signed up successfully. Please login'))).close;
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginView()));
         }
@@ -88,29 +90,40 @@ class SignupView extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: TextField(
-                          controller: txtPassword,
-                          obscureText: isObscurePassword,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: 'Password',
-                            hintStyle: const TextStyle(color: Colors.black),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 10.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                context.read<AuthBloc>().add(
-                                    AuthPasswordRevealIconButtonPressedEvent(
-                                        isObscure: isObscurePassword));
-                              },
-                              icon: const Icon(Icons.visibility_off_outlined),
-                              color: Colors.black,
-                            ),
-                          ),
+                        child: BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            bool isObscurePassword = true;
+                            if (state is AuthPasswordRevealState) {
+                              isObscurePassword = state.isObscure;
+                            }
+                            return TextField(
+                              controller: txtPassword,
+                              obscureText: isObscurePassword,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: isObscurePassword,
+                                hintText: 'Password',
+                                hintStyle: const TextStyle(color: Colors.black),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 20.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    context.read<AuthBloc>().add(
+                                        AuthPasswordRevealIconButtonPressedEvent(
+                                            isObscure: isObscurePassword));
+                                  },
+                                  icon: Icon(isObscurePassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined),
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Padding(

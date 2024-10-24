@@ -34,3 +34,4 @@ final class AuthPasswordRevealIconButtonPressedEvent extends AuthEvent {
 final class AuthNavigateToSignupPressedEvent extends AuthEvent {}
 
 final class AuthNavigateToLoginPressedEvent extends AuthEvent {}
+

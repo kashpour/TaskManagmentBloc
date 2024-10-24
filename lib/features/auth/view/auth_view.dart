@@ -23,7 +23,7 @@ class _AuthViewState extends State<AuthView> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthLoadingState) {
+        if (state is AuthLoadedSuccessState) {
           Navigator.push(
               context,
               MaterialPageRoute(

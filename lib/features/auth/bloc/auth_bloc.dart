@@ -18,11 +18,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _authForgetPasswordButtonPressedEvent);
 
     on<AuthSignupButtonPressedEvent>(_authSignupButtonPressedEvent);
+    on<AuthPasswordRevealIconButtonPressedEvent>(
+        _authPasswordRevealIconButtonPressedEvent);
   }
   FutureOr<void> _authInitialEvent(event, Emitter<AuthState> emit) async {
     emit(AuthInitialState());
     await Future.delayed(const Duration(seconds: 2));
-    emit(AuthLoadingState());
+    emit(AuthLoadedSuccessState());
   }
 
   FutureOr<void> _authNavigateToLoginPressedEvent(
@@ -37,21 +39,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _authLoginButtonPressedEvent(
       AuthLoginButtonPressedEvent event, Emitter<AuthState> emit) async {
-    await authRepo.lgoinWithEmailAndPassword(event.email, event.password);
-    emit(AuthLoadingState());
-    emit(AuthLoginState());
-  }
-
-  FutureOr<void> _authForgetPasswordButtonPressedEvent(
-      AuthForgetPasswordButtonPressedEvent event,
-      Emitter<AuthState> emit) async {
-    await authRepo.forgetUserPassword(event.email);
-    // TODo make a state for forgetPassword to be able to show the snack bar
+    try {
+      await authRepo.lgoinWithEmailAndPassword(event.email, event.password);
+      emit(AuthLoadingState());
+      emit(AuthLoginState());
+    } catch (e) {
+      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _authSignupButtonPressedEvent(
       AuthSignupButtonPressedEvent event, Emitter<AuthState> emit) async {
-    await authRepo.signupWithEmailAndPassword(event.email, event.password);
-    emit(AuthSignupState());
+    try {
+      await authRepo.signupWithEmailAndPassword(event.email, event.password);
+      emit(AuthSignupState());
+    } catch (e) {
+      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _authForgetPasswordButtonPressedEvent(
+      AuthForgetPasswordButtonPressedEvent event, Emitter<AuthState> emit) {
+    authRepo.forgetUserPassword(event.email);
+    emit(AuthForgetPasswordState());
+  }
+
+  FutureOr<void> _authPasswordRevealIconButtonPressedEvent(
+      AuthPasswordRevealIconButtonPressedEvent event, Emitter<AuthState> emit) {
+    emit(AuthPasswordRevealState(isObscure: !event.isObscure));
   }
 }
