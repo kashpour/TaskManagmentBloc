@@ -3,26 +3,32 @@ part of 'auth_bloc.dart';
 @immutable
 sealed class AuthEvent {}
 
-final class AuthInitialEvent extends AuthEvent{}
+final class AuthInitialEvent extends AuthEvent {}
+
 final class AuthSignupButtonPressedEvent extends AuthEvent {
-  final String userName;
+  final String email;
   final String password;
 
-  AuthSignupButtonPressedEvent(
-      {required this.userName, required this.password});
+  AuthSignupButtonPressedEvent({required this.email, required this.password});
 }
 
 final class AuthLoginButtonPressedEvent extends AuthEvent {
-  final String userName;
+  final String email;
   final String password;
 
-  AuthLoginButtonPressedEvent({required this.userName, required this.password});
+  AuthLoginButtonPressedEvent({required this.email, required this.password});
 }
 
 final class AuthForgetPasswordButtonPressedEvent extends AuthEvent {
-  final String userName;
+  final String email;
 
-  AuthForgetPasswordButtonPressedEvent({required this.userName});
+  AuthForgetPasswordButtonPressedEvent({required this.email});
+}
+
+final class AuthPasswordRevealIconButtonPressedEvent extends AuthEvent {
+  final bool isObscure;
+
+  AuthPasswordRevealIconButtonPressedEvent({required this.isObscure});
 }
 
 final class AuthNavigateToSignupPressedEvent extends AuthEvent {}

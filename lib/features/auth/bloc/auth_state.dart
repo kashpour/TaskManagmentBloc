@@ -7,7 +7,11 @@ final class AuthInitialState extends AuthState {}
 
 final class AuthLoadingState extends AuthState {}
 
-final class AuthLoadedSuccessState extends AuthState {}
+final class AuthLoadedSuccessState extends AuthState {
+  final bool isObscure;
+
+  AuthLoadedSuccessState({required this.isObscure});
+}
 
 final class AuthLoadedFailureSate extends AuthState {}
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepo {
@@ -38,7 +40,7 @@ class DevAuthRepo implements AuthRepo {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
   }
 }

@@ -27,8 +27,7 @@ class _AuthViewState extends State<AuthView> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const LoginView(),
-                  fullscreenDialog: true));
+                  builder: (context) => LoginView(), fullscreenDialog: true));
         }
       },
       builder: (context, state) {
