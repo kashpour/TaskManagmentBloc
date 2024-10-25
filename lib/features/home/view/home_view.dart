@@ -6,19 +6,8 @@ import '../../../utils/constants/my_colors.dart';
 import '../../auth/view/login/login_view.dart';
 import '../bloc/task_bloc.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  @override
-  void initState() {
-    context.read<TaskBloc>().add(TaskFetchTasksEvent());
-    super.initState();
-  }
+class HomeView extends StatelessWidget {
+  HomeView({super.key});
 
   final TextEditingController txtTitle = TextEditingController();
 
@@ -28,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TaskBloc, TaskState>(
+    return BlocListener<TaskBloc, TaskState>(
       listener: (context, state) {
         if (state is UserLogOutState) {
           Navigator.push(
@@ -44,71 +33,62 @@ class _HomeViewState extends State<HomeView> {
           customShowDialog(context);
         }
       },
-      builder: (context, state) {
-        if (state is TaskLoadedSuccessState) {
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: mainColor,
-              onPressed: () {
-                context
-                    .read<TaskBloc>()
-                    .add(TaskAddNewTaskButtonPressedEvent());
-              },
-              child: const Icon(Icons.add, size: 28.0, color: Colors.white),
-            ),
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: () => context
-                      .read<TaskBloc>()
-                      .add(TaskLogOutButtonPressedEvent()),
-                  icon:
-                      const Icon(Icons.logout, size: 32.0, color: Colors.black),
-                )
-              ],
-              automaticallyImplyLeading: false,
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(color: mainColor),
-                child: const SafeArea(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: mainColor,
+          onPressed: () {
+            context.read<TaskBloc>().add(TaskAddNewTaskButtonPressedEvent());
+          },
+          child: const Icon(Icons.add, size: 28.0, color: Colors.white),
+        ),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () =>
+                  context.read<TaskBloc>().add(TaskLogOutButtonPressedEvent()),
+              icon: const Icon(Icons.logout, size: 32.0, color: Colors.black),
+            )
+          ],
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(color: mainColor),
+            child: const SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 10.0),
+                  CircleAvatar(child: Icon(Icons.person)),
+                  SizedBox(width: 20.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(width: 10.0),
-                      CircleAvatar(child: Icon(Icons.person)),
-                      SizedBox(width: 20.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Ibrahim Kashbor',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'ibrahimkashbor@gmail.com',
-                            style: TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                      Text(
+                        'Ibrahim Kashbor',
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'ibrahimkashbor@gmail.com',
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
-            body: ListView.builder(
-                itemCount: state.taskModel.length,
-                itemBuilder: (context, index) {
-                  var task = state.taskModel[index];
-                  return CustomTaskWidget(
-                      title: task.title,
-                      description: task.body,
-                      dateTime: task.dateTime);
-                }),
-          );
-        }
-        return const Center(child: Text('No Data'));
-      },
+          ),
+        ),
+        body: BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            return const CustomTaskWidget(
+              title: '',
+              description: '',
+              dateTime: '',
+            );
+          },
+        ),
+      ),
     );
   }
 
