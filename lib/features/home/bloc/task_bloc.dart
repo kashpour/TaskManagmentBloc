@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
 import '../../../data/repositories/auth_repo.dart';
 import '../../../data/repositories/task_repo.dart';
+import '../models/task_model.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
@@ -50,15 +50,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskFetchTasksEvent(
       TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
     try {
-      final Stream loadTasks = taskRepo.loadTask();
-      await emit.forEach(
-        loadTasks,
-        onData: (snapshot) {
-          final task =
-              snapshot.docs.map((doc) => TaskModel.fromJson(doc)).toList();
-          return TaskLoadedSuccessState(taskModel: task);
-        },
-      );
+      final taskStream = taskRepo.loadTask().map((snapshot) {
+        final tasks = snapshot.docs
+            .map((doc) => TaskModel.fromJson(doc))
+            .toList();
+        return TaskLoadedSuccessState(taskModel: tasks);
+      });
+      await emit.forEach(taskStream, onData: (state) => state);
     } catch (e) {
       emit(TaskFailureSate(failureMessage: e.toString()));
     }

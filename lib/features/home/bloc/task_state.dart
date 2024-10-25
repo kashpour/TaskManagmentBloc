@@ -5,16 +5,18 @@ sealed class TaskState {}
 
 final class TaskInitial extends TaskState {}
 
-final class TaskFailureSate extends TaskState {
-  final String failureMessage;
-
-  TaskFailureSate({required this.failureMessage});
-}
+final class TaskLoadingState extends TaskState {}
 
 final class TaskLoadedSuccessState extends TaskState {
   final List<TaskModel> taskModel;
 
   TaskLoadedSuccessState({required this.taskModel});
+}
+
+final class TaskFailureSate extends TaskState {
+  final String failureMessage;
+
+  TaskFailureSate({required this.failureMessage});
 }
 
 final class UserLogOutState extends TaskState {}

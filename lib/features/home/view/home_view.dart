@@ -17,6 +17,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<TaskBloc>().add(TaskFetchTasksEvent());
+
     return BlocListener<TaskBloc, TaskState>(
       listener: (context, state) {
         if (state is UserLogOutState) {
@@ -81,11 +83,26 @@ class HomeView extends StatelessWidget {
         ),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
-            return const CustomTaskWidget(
-              title: 'title',
-              description: 'Descrio',
-              dateTime: 'DateTime',
-            );
+            if (state is TaskLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is TaskLoadedSuccessState) {
+              return ListView.builder(
+                itemCount: state.taskModel.length,
+                itemBuilder: (context, index) {
+                return CustomTaskWidget(
+                  title: state.taskModel[index].title,
+                  description: state.taskModel[index].body,
+                  dateTime: state.taskModel[index].dateTime,
+                );
+              });
+            } else if (state is TaskFailureSate) {
+              return Center(
+                child: Text(state.failureMessage),
+              );
+            }
+            return const SizedBox();
           },
         ),
       ),
