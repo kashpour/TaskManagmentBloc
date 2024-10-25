@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
 import '../../../data/repositories/auth_repo.dart';
 import '../../../data/repositories/task_repo.dart';
@@ -17,6 +18,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       : super(TaskInitial()) {
     on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
     on<TaskAddNewTaskButtonPressedEvent>(_taskAddNewTaskButtonPressedEvent);
+    on<TaskAddNewTaskEvent>(_taskAddNewTaskEvent);
   }
 
   FutureOr<void> _taskLogOutButtonPressedEvent(
@@ -32,5 +34,13 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskAddNewTaskButtonPressedEvent(
       TaskAddNewTaskButtonPressedEvent event, Emitter<TaskState> emit) {
     emit(TaskAddNewTaskDialogState());
+  }
+
+  FutureOr<void> _taskAddNewTaskEvent(
+      TaskAddNewTaskEvent event, Emitter<TaskState> emit) {
+    final TaskModel newTask = TaskModel(
+        title: event.title, body: event.body, dateTime: event.dateTime);
+    taskRepo.addTask(newTask);
+    emit(TaskAddNewTaskState());
   }
 }

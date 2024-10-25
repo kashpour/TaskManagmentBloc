@@ -18,6 +18,11 @@ class HomeView extends StatelessWidget {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginView()));
         }
+        if (state is TaskAddNewTaskState) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Added New Task')));
+        }
         if (state is TaskAddNewTaskDialogState) {
           showDialog(
               context: context,
@@ -36,6 +41,7 @@ class HomeView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextField(
+                          controller: txtTitle,
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -44,6 +50,7 @@ class HomeView extends StatelessWidget {
                               hintText: 'Title'),
                         ),
                         TextField(
+                          controller: txtDescription,
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -52,6 +59,7 @@ class HomeView extends StatelessWidget {
                               hintText: 'Description'),
                         ),
                         TextField(
+                          controller: txtDateTime,
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -77,6 +85,8 @@ class HomeView extends StatelessWidget {
                         style:
                             TextButton.styleFrom(backgroundColor: Colors.blue),
                         onPressed: () {
+                          print(txtTitle.text);
+
                           context.read<TaskBloc>().add(TaskAddNewTaskEvent(
                               title: txtTitle.text,
                               body: txtDescription.text,

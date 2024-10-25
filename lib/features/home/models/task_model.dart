@@ -1,7 +1,7 @@
 class TaskModel {
   final String title;
   final String body;
-  final DateTime dateTime;
+  final String dateTime;
 
   TaskModel({required this.title, required this.body, required this.dateTime});
 
