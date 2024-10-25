@@ -6,7 +6,7 @@ abstract class AuthRepo {
   Future<UserCredential> signupWithEmailAndPassword(
       String email, String password);
   Future forgetUserPassword(String email);
-  User? getCurrentUser();
+  String? getCurrentUser();
   void signOutUser();
 }
 
@@ -14,8 +14,8 @@ class DevAuthRepo implements AuthRepo {
   final _auth = FirebaseAuth.instance;
 
   @override
-  User? getCurrentUser() {
-    return _auth.currentUser;
+  String? getCurrentUser() {
+    return _auth.currentUser!.email;
   }
 
   @override

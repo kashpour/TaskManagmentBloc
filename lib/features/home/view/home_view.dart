@@ -32,6 +32,7 @@ class HomeView extends StatelessWidget {
           txtDescription.clear();
           txtDateTime.clear();
         } else if (state is TaskAddNewTaskDialogState) {
+          context.read<TaskBloc>().add(TaskFetchTasksEvent());
           customShowDialog(context);
         }
       },
@@ -54,27 +55,37 @@ class HomeView extends StatelessWidget {
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(color: mainColor),
-            child: const SafeArea(
+            child: SafeArea(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(width: 10.0),
-                  CircleAvatar(child: Icon(Icons.person)),
-                  SizedBox(width: 20.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ibrahim Kashbor',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'ibrahimkashbor@gmail.com',
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                  const SizedBox(width: 10.0),
+                  const CircleAvatar(child: Icon(Icons.person)),
+                  const SizedBox(width: 20.0),
+                  BlocBuilder<TaskBloc, TaskState>(
+                    builder: (context, state) {
+                      String email = '';
+                      String userName = '';
+                      if (state is TaskLoadedSuccessState) {
+                        email = state.email;
+                        userName = state.userName;
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userName,
+                            style: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            email,
+                            style: const TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -89,14 +100,14 @@ class HomeView extends StatelessWidget {
               );
             } else if (state is TaskLoadedSuccessState) {
               return ListView.builder(
-                itemCount: state.taskModel.length,
-                itemBuilder: (context, index) {
-                return CustomTaskWidget(
-                  title: state.taskModel[index].title,
-                  description: state.taskModel[index].body,
-                  dateTime: state.taskModel[index].dateTime,
-                );
-              });
+                  itemCount: state.taskModel.length,
+                  itemBuilder: (context, index) {
+                    return CustomTaskWidget(
+                      title: state.taskModel[index].title,
+                      description: state.taskModel[index].description,
+                      dateTime: state.taskModel[index].dateTime,
+                    );
+                  });
             } else if (state is TaskFailureSate) {
               return Center(
                 child: Text(state.failureMessage),
@@ -159,6 +170,7 @@ class HomeView extends StatelessWidget {
                   style: TextButton.styleFrom(backgroundColor: Colors.red),
                   onPressed: () {
                     Navigator.pop(context);
+                    context.read<TaskBloc>().add(TaskFetchTasksEvent());
                   },
                   child: const Text(
                     'Cancel',
@@ -169,7 +181,7 @@ class HomeView extends StatelessWidget {
                   onPressed: () {
                     context.read<TaskBloc>().add(TaskAddNewTaskEvent(
                         title: txtTitle.text,
-                        body: txtDescription.text,
+                        description: txtDescription.text,
                         dateTime: txtDateTime.text));
                   },
                   child: const Text(

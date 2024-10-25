@@ -42,7 +42,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskAddNewTaskEvent(
       TaskAddNewTaskEvent event, Emitter<TaskState> emit) {
     final TaskModel newTask = TaskModel(
-        title: event.title, body: event.body, dateTime: event.dateTime);
+        title: event.title,
+        description: event.description,
+        dateTime: event.dateTime);
     taskRepo.addTask(newTask);
     emit(TaskAddNewTaskState());
   }
@@ -52,9 +54,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     try {
       final taskStream = taskRepo.loadTask().map((snapshot) {
         final tasks = snapshot.docs
-            .map((doc) => TaskModel.fromJson(doc))
+            .map((doc) => TaskModel.fromJson(doc, doc.id))
             .toList();
-        return TaskLoadedSuccessState(taskModel: tasks);
+        return TaskLoadedSuccessState(
+            taskModel: tasks,
+            email: authRepo.getCurrentUser()!,
+            userName: authRepo.getCurrentUser()!.split('@')[0]);
       });
       await emit.forEach(taskStream, onData: (state) => state);
     } catch (e) {

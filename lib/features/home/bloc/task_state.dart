@@ -3,14 +3,17 @@ part of 'task_bloc.dart';
 @immutable
 sealed class TaskState {}
 
-final class TaskInitial extends TaskState {}
+final class TaskInitial extends TaskState {
+  }
 
 final class TaskLoadingState extends TaskState {}
 
 final class TaskLoadedSuccessState extends TaskState {
   final List<TaskModel> taskModel;
+  final String email;
+  final String userName;
 
-  TaskLoadedSuccessState({required this.taskModel});
+  TaskLoadedSuccessState({required this.taskModel, required this.email, required this.userName});
 }
 
 final class TaskFailureSate extends TaskState {

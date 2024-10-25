@@ -18,11 +18,11 @@ final class TaskNavigateToCompletedTasksButtonPressedEvent extends TaskEvent {}
 
 final class TaskAddNewTaskEvent extends TaskEvent {
   final String title;
-  final String body;
+  final String description;
   final String dateTime;
 
   TaskAddNewTaskEvent(
-      {required this.title, required this.body, required this.dateTime});
+      {required this.title, required this.description, required this.dateTime});
 }
 
 final class TaskFetchTasksEvent extends TaskEvent {}

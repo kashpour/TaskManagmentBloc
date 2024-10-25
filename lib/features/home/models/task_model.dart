@@ -1,25 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
-  final String title;
-  final String body;
-  final String dateTime;
+  String id = '';
+  String title = '';
+  String description = '';
+  String dateTime = '';
 
-  TaskModel({required this.title, required this.body, required this.dateTime});
+  TaskModel(
+      {required this.title, required this.description, required this.dateTime});
 
-  factory TaskModel.fromJson(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>; // Ensure it's a Map
-
-    return TaskModel(
-      title: data['title'] ?? '',
-      body: data['body'] ?? '',
-      dateTime: data['dateTime'] ?? '',
-    );
+  TaskModel.fromJson(DocumentSnapshot doc, String documentId) {
+    final data = doc.data() as Map<String, dynamic>;
+    id = documentId;
+    title = data['title'] ?? '';
+    description = data['description'] ?? '';
+    dateTime = data['dateTime'] ?? '';
   }
+
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'title': title,
-      'body': body,
+      'description': description,
       'dateTime': dateTime,
     };
   }

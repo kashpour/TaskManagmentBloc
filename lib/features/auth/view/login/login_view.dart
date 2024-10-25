@@ -23,7 +23,10 @@ class LoginView extends StatelessWidget {
               context, MaterialPageRoute(builder: (context) => SignupView()));
         } else if (state is AuthLoginState) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeView()));
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeView(),
+              ));
         } else if (state is AuthForgetPasswordState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('An Email has been sent to reset your password')));
