@@ -82,9 +82,9 @@ class HomeView extends StatelessWidget {
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             return const CustomTaskWidget(
-              title: '',
-              description: '',
-              dateTime: '',
+              title: 'title',
+              description: 'Descrio',
+              dateTime: 'DateTime',
             );
           },
         ),

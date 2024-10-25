@@ -28,6 +28,7 @@ class CustomTaskWidget extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -52,7 +53,13 @@ class CustomTaskWidget extends StatelessWidget {
                   fontSize: 16.0,
                 ),
               ),
+            ],
+          ),
+          Row(
+            children: [
               Container(
+                  width: 35,
+                  height: 35,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.white),
@@ -62,11 +69,9 @@ class CustomTaskWidget extends StatelessWidget {
                             .read<TaskBloc>()
                             .add(TaskCompletedButtonPressedEvent());
                       },
-                      icon: const Icon(Icons.done)))
-            ],
-          ),
-          Row(
-            children: [
+                      icon: const Icon(
+                        Icons.done,
+                      ))),
               IconButton(
                   onPressed: () {
                     context
