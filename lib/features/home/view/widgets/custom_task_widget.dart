@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
 import '../../../../utils/constants/my_colors.dart';
 import '../../bloc/task_bloc.dart';
 
 class CustomTaskWidget extends StatelessWidget {
   const CustomTaskWidget({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.dateTime,
+    super.key, required this.task,
+   
   });
-  final String title;
-  final String description;
-  final String dateTime;
+  final TaskModel task;
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +32,20 @@ class CustomTaskWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                task.title,
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                description,
+                task.description,
                 style: const TextStyle(
                   fontSize: 16.0,
                 ),
               ),
               Text(
-                dateTime,
+                task.dateTime,
                 style: const TextStyle(
                   fontSize: 16.0,
                 ),
@@ -76,7 +73,7 @@ class CustomTaskWidget extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<TaskBloc>()
-                        .add(TaskUpdateTaskButtonPressedEvent());
+                        .add(TaskUpdateTaskButtonPressedEvent(task: task, documentId: task.id));
                   },
                   icon: Icon(
                     Icons.edit_document,
@@ -87,7 +84,7 @@ class CustomTaskWidget extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<TaskBloc>()
-                        .add(TaskDeleteTaskButtonPressedEvent());
+                        .add(TaskDeleteTaskButtonPressedEvent(taskID: task.id));
                   },
                   icon: Icon(
                     Icons.delete,

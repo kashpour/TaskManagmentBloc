@@ -8,9 +8,19 @@ final class TaskLogOutButtonPressedEvent extends TaskEvent {}
 //actions
 final class TaskAddNewTaskButtonPressedEvent extends TaskEvent {}
 
-final class TaskUpdateTaskButtonPressedEvent extends TaskEvent {}
+final class TaskUpdateTaskButtonPressedEvent extends TaskEvent {
+  final TaskModel task;
+  final String documentId;
 
-final class TaskDeleteTaskButtonPressedEvent extends TaskEvent {}
+  TaskUpdateTaskButtonPressedEvent(
+      {required this.task, required this.documentId});
+}
+
+final class TaskDeleteTaskButtonPressedEvent extends TaskEvent {
+  final String taskID;
+
+  TaskDeleteTaskButtonPressedEvent({required this.taskID});
+}
 
 final class TaskCompletedButtonPressedEvent extends TaskEvent {}
 
@@ -26,3 +36,10 @@ final class TaskAddNewTaskEvent extends TaskEvent {
 }
 
 final class TaskFetchTasksEvent extends TaskEvent {}
+
+final class TaskUpdatedTaskEvent extends TaskEvent {
+  final TaskModel task;
+  final String documentId;
+
+  TaskUpdatedTaskEvent({required this.task, required this.documentId});
+}

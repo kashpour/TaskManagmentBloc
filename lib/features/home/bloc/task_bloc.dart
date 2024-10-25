@@ -20,6 +20,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskAddNewTaskButtonPressedEvent>(_taskAddNewTaskButtonPressedEvent);
     on<TaskAddNewTaskEvent>(_taskAddNewTaskEvent);
     on<TaskFetchTasksEvent>(_taskFetchTasksEvent);
+    on<TaskDeleteTaskButtonPressedEvent>(_taskDeleteTaskButtonPressedEvent);
+    on<TaskUpdateTaskButtonPressedEvent>(_taskUpdateTaskButtonPressedEvent);
+    on<TaskUpdatedTaskEvent>(_taskUpdatedTaskEvent);
   }
 
   FutureOr<void> _taskLogOutButtonPressedEvent(
@@ -65,5 +68,21 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     } catch (e) {
       emit(TaskFailureSate(failureMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _taskDeleteTaskButtonPressedEvent(
+      TaskDeleteTaskButtonPressedEvent event, Emitter<TaskState> emit) {
+    taskRepo.deleteTask(event.taskID);
+  }
+
+  FutureOr<void> _taskUpdateTaskButtonPressedEvent(
+      TaskUpdateTaskButtonPressedEvent event, Emitter<TaskState> emit) {
+    emit(TaskUpdateTaskDialogState(task: event.task));
+    
+  }
+
+  FutureOr<void> _taskUpdatedTaskEvent(TaskUpdatedTaskEvent event, Emitter<TaskState> emit) {
+    taskRepo.updateTask(event.task, event.documentId);
+    emit(TaskUpdateTaskState());
   }
 }

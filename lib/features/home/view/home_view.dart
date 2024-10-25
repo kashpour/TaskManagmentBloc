@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_managment_bloc/features/home/models/task_model.dart';
 import 'package:task_managment_bloc/features/home/view/widgets/custom_task_widget.dart';
 
 import '../../../utils/constants/my_colors.dart';
@@ -33,7 +34,13 @@ class HomeView extends StatelessWidget {
           txtDateTime.clear();
         } else if (state is TaskAddNewTaskDialogState) {
           context.read<TaskBloc>().add(TaskFetchTasksEvent());
-          customShowDialog(context);
+          customShowDialog(context, 'new', '');
+        } else if (state is TaskUpdateTaskDialogState) {
+          context.read<TaskBloc>().add(TaskFetchTasksEvent());
+          txtTitle.text = state.task.title;
+          txtDescription.text = state.task.description;
+          txtDateTime.text = state.task.dateTime;
+          customShowDialog(context, 'edit', state.task.id);
         }
       },
       child: Scaffold(
@@ -103,9 +110,7 @@ class HomeView extends StatelessWidget {
                   itemCount: state.taskModel.length,
                   itemBuilder: (context, index) {
                     return CustomTaskWidget(
-                      title: state.taskModel[index].title,
-                      description: state.taskModel[index].description,
-                      dateTime: state.taskModel[index].dateTime,
+                      task: state.taskModel[index],
                     );
                   });
             } else if (state is TaskFailureSate) {
@@ -120,7 +125,8 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Future<dynamic> customShowDialog(BuildContext context) {
+  Future<dynamic> customShowDialog(
+      BuildContext context, String type, String documentId) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -128,7 +134,7 @@ class HomeView extends StatelessWidget {
             titleTextStyle: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             backgroundColor: mainColor,
-            title: const Text('Add New Task'),
+            title: Text(type == 'new' ? 'Add New Task' : 'Edit Task'),
             content: SizedBox(
               width: 150,
               height: 190,
@@ -170,7 +176,6 @@ class HomeView extends StatelessWidget {
                   style: TextButton.styleFrom(backgroundColor: Colors.red),
                   onPressed: () {
                     Navigator.pop(context);
-                    context.read<TaskBloc>().add(TaskFetchTasksEvent());
                   },
                   child: const Text(
                     'Cancel',
@@ -179,14 +184,22 @@ class HomeView extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () {
-                    context.read<TaskBloc>().add(TaskAddNewTaskEvent(
-                        title: txtTitle.text,
-                        description: txtDescription.text,
-                        dateTime: txtDateTime.text));
+                    type == 'new'
+                        ? context.read<TaskBloc>().add(TaskAddNewTaskEvent(
+                            title: txtTitle.text,
+                            description: txtDescription.text,
+                            dateTime: txtDateTime.text))
+                        : context.read<TaskBloc>().add(TaskUpdatedTaskEvent(
+                            task: TaskModel(
+                                title: txtTitle.text,
+                                description: txtDescription.text,
+                                dateTime: txtDateTime.text),
+                            documentId: documentId));
+                    Navigator.pop(context);
                   },
-                  child: const Text(
-                    'Add',
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    type == 'new' ? 'Add' : 'Edit',
+                    style: const TextStyle(color: Colors.white),
                   )),
             ],
           );
