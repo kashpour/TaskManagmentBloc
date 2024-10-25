@@ -7,6 +7,7 @@ abstract class AuthRepo {
       String email, String password);
   Future forgetUserPassword(String email);
   User? getCurrentUser();
+  void signOutUser();
 }
 
 class DevAuthRepo implements AuthRepo {
@@ -65,5 +66,10 @@ class DevAuthRepo implements AuthRepo {
       default:
         return 'An unknown error occurred. Please try again later.';
     }
+  }
+
+  @override
+  void signOutUser() async {
+    await _auth.signOut();
   }
 }
