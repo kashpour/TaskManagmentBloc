@@ -19,6 +19,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
     on<TaskAddNewTaskButtonPressedEvent>(_taskAddNewTaskButtonPressedEvent);
     on<TaskAddNewTaskEvent>(_taskAddNewTaskEvent);
+    on<TaskFetchTasksEvent>(_taskFetchTasksEvent);
   }
 
   FutureOr<void> _taskLogOutButtonPressedEvent(
@@ -27,7 +28,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       authRepo.signOutUser();
       emit(UserLogOutState());
     } catch (e) {
-      emit(TaskFailureSate(failureMessage: e.toString()));
+      emit(TaskFailureSate(
+        failureMessage: e.toString(),
+      ));
     }
   }
 
@@ -42,5 +45,22 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         title: event.title, body: event.body, dateTime: event.dateTime);
     taskRepo.addTask(newTask);
     emit(TaskAddNewTaskState());
+  }
+
+  FutureOr<void> _taskFetchTasksEvent(
+      TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
+    try {
+      final Stream loadTasks = taskRepo.loadTask();
+      await emit.forEach(
+        loadTasks,
+        onData: (snapshot) {
+          final task =
+              snapshot.docs.map((doc) => TaskModel.fromJson(doc)).toList();
+          return TaskLoadedSuccessState(taskModel: task);
+        },
+      );
+    } catch (e) {
+      emit(TaskFailureSate(failureMessage: e.toString()));
+    }
   }
 }

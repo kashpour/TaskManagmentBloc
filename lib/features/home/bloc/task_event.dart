@@ -24,3 +24,5 @@ final class TaskAddNewTaskEvent extends TaskEvent {
   TaskAddNewTaskEvent(
       {required this.title, required this.body, required this.dateTime});
 }
+
+final class TaskFetchTasksEvent extends TaskEvent {}
