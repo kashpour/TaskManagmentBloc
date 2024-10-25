@@ -83,15 +83,15 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      bool isObscurePassword = true;
-                      if (state is AuthPasswordRevealState) {
-                        isObscurePassword = state.isObscure;
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextField(
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        bool isObscurePassword = true;
+                        if (state is AuthPasswordRevealState) {
+                          isObscurePassword = state.isObscure;
+                        }
+                        return TextField(
                           controller: txtPassword,
                           obscureText: isObscurePassword,
                           decoration: InputDecoration(
@@ -116,9 +116,9 @@ class LoginView extends StatelessWidget {
                               color: Colors.black,
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
