@@ -22,7 +22,11 @@ final class TaskDeleteTaskButtonPressedEvent extends TaskEvent {
   TaskDeleteTaskButtonPressedEvent({required this.taskID});
 }
 
-final class TaskCompletedButtonPressedEvent extends TaskEvent {}
+final class TaskCompletedButtonPressedEvent extends TaskEvent {
+  final TaskModel task;
+
+  TaskCompletedButtonPressedEvent({required this.task});
+}
 
 final class TaskNavigateToCompletedTasksButtonPressedEvent extends TaskEvent {}
 
@@ -30,12 +34,18 @@ final class TaskAddNewTaskEvent extends TaskEvent {
   final String title;
   final String description;
   final String dateTime;
+  final bool isCompleted;
 
   TaskAddNewTaskEvent(
-      {required this.title, required this.description, required this.dateTime});
+      {required this.title,
+      required this.description,
+      required this.dateTime,
+      required this.isCompleted});
 }
 
 final class TaskFetchTasksEvent extends TaskEvent {}
+
+final class TaskFetchComletedTasksEvent extends TaskEvent{}
 
 final class TaskUpdatedTaskEvent extends TaskEvent {
   final TaskModel task;

@@ -40,6 +40,10 @@ final class TaskUpdateTaskState extends TaskState {}
 
 final class TaskDeleteTaskDialogState extends TaskState {}
 
-final class TaskCompleteTaskState extends TaskState {}
+final class TaskCompleteTaskState extends TaskState {
+  final TaskModel task;
+
+  TaskCompleteTaskState({required this.task});
+}
 
 final class TaskNavigateToCompletedTasksState extends TaskState {}

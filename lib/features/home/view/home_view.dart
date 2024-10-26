@@ -34,19 +34,22 @@ class HomeView extends StatelessWidget {
           txtDateTime.clear();
         } else if (state is TaskAddNewTaskDialogState) {
           context.read<TaskBloc>().add(TaskFetchTasksEvent());
-          customShowDialog(context, 'new', '');
+          customShowDialog(context, true, '');
         } else if (state is TaskUpdateTaskDialogState) {
           context.read<TaskBloc>().add(TaskFetchTasksEvent());
           txtTitle.text = state.task.title;
           txtDescription.text = state.task.description;
           txtDateTime.text = state.task.dateTime;
-          customShowDialog(context, 'edit', state.task.id);
+          customShowDialog(context, false, state.task.id);
         }
       },
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: mainColor,
           onPressed: () {
+            txtTitle.text = '';
+            txtDescription.text = '';
+            txtDateTime.text = '';
             context.read<TaskBloc>().add(TaskAddNewTaskButtonPressedEvent());
           },
           child: const Icon(Icons.add, size: 28.0, color: Colors.white),
@@ -98,6 +101,25 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ),
+          bottom: PreferredSize(
+              preferredSize: const Size(100, 100),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        context.read<TaskBloc>().add(TaskFetchTasksEvent());
+                      },
+                      child: const Text('Tasks')),
+                  TextButton(
+                      onPressed: () {
+                        context
+                            .read<TaskBloc>()
+                            .add(TaskFetchComletedTasksEvent());
+                      },
+                      child: const Text('Comleted Task')),
+                ],
+              )),
         ),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
@@ -126,7 +148,7 @@ class HomeView extends StatelessWidget {
   }
 
   Future<dynamic> customShowDialog(
-      BuildContext context, String type, String documentId) {
+      BuildContext context, bool isNew, String documentId) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -134,7 +156,7 @@ class HomeView extends StatelessWidget {
             titleTextStyle: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             backgroundColor: mainColor,
-            title: Text(type == 'new' ? 'Add New Task' : 'Edit Task'),
+            title: Text(isNew ? 'Add New Task' : 'Edit Task'),
             content: SizedBox(
               width: 150,
               height: 190,
@@ -184,21 +206,28 @@ class HomeView extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () {
-                    type == 'new'
+                    isNew
                         ? context.read<TaskBloc>().add(TaskAddNewTaskEvent(
-                            title: txtTitle.text,
-                            description: txtDescription.text,
-                            dateTime: txtDateTime.text))
-                        : context.read<TaskBloc>().add(TaskUpdatedTaskEvent(
-                            task: TaskModel(
-                                title: txtTitle.text,
-                                description: txtDescription.text,
-                                dateTime: txtDateTime.text),
-                            documentId: documentId));
-                    Navigator.pop(context);
+                              title: txtTitle.text,
+                              description: txtDescription.text,
+                              dateTime: txtDateTime.text,
+                              isCompleted: false,
+                            ))
+                        : {
+                            context.read<TaskBloc>().add(TaskUpdatedTaskEvent(
+                                  task: TaskModel(
+                                    title: txtTitle.text,
+                                    description: txtDescription.text,
+                                    dateTime: txtDateTime.text,
+                                    isCompleted: false,
+                                  ),
+                                  documentId: documentId,
+                                )),
+                            Navigator.pop(context),
+                          };
                   },
                   child: Text(
-                    type == 'new' ? 'Add' : 'Edit',
+                    isNew ? 'Add' : 'Edit',
                     style: const TextStyle(color: Colors.white),
                   )),
             ],

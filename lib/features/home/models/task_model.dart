@@ -5,9 +5,13 @@ class TaskModel {
   String title = '';
   String description = '';
   String dateTime = '';
+  bool isCompleted = false;
 
   TaskModel(
-      {required this.title, required this.description, required this.dateTime});
+      {required this.title,
+      required this.description,
+      required this.dateTime,
+      required this.isCompleted});
 
   TaskModel.fromJson(DocumentSnapshot doc, String documentId) {
     final data = doc.data() as Map<String, dynamic>;
@@ -15,6 +19,7 @@ class TaskModel {
     title = data['title'] ?? '';
     description = data['description'] ?? '';
     dateTime = data['dateTime'] ?? '';
+    isCompleted = data['isCompleted'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +28,7 @@ class TaskModel {
       'title': title,
       'description': description,
       'dateTime': dateTime,
+      'isCompleted': isCompleted,
     };
   }
 }

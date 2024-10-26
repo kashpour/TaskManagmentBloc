@@ -64,7 +64,7 @@ class CustomTaskWidget extends StatelessWidget {
                       onPressed: () {
                         context
                             .read<TaskBloc>()
-                            .add(TaskCompletedButtonPressedEvent());
+                            .add(TaskCompletedButtonPressedEvent(task: task));
                       },
                       icon: const Icon(
                         Icons.done,
