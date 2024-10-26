@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../features/auth/models/user_model.dart';
+
 abstract class AuthRepo {
   Future<UserCredential> lgoinWithEmailAndPassword(
       String email, String password);
   Future<UserCredential> signupWithEmailAndPassword(
       String email, String password);
   Future forgetUserPassword(String email);
-  String? getCurrentUser();
+  UserModel getUserInfo();
   void signOutUser();
 }
 
@@ -14,8 +16,11 @@ class DevAuthRepo implements AuthRepo {
   final _auth = FirebaseAuth.instance;
 
   @override
-  String? getCurrentUser() {
-    return _auth.currentUser!.email;
+  UserModel getUserInfo() {
+    return UserModel(
+      email: _auth.currentUser?.email,
+      username: _auth.currentUser?.email!.split('@')[0],
+    );
   }
 
   @override

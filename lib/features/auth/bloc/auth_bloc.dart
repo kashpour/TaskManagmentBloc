@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:task_managment_bloc/data/repositories/auth_repo.dart';
+import '../../../data/repositories/auth_repo.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -16,7 +16,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginButtonPressedEvent>(_authLoginButtonPressedEvent);
     on<AuthForgetPasswordButtonPressedEvent>(
         _authForgetPasswordButtonPressedEvent);
-
     on<AuthSignupButtonPressedEvent>(_authSignupButtonPressedEvent);
     on<AuthPasswordRevealIconButtonPressedEvent>(
         _authPasswordRevealIconButtonPressedEvent);

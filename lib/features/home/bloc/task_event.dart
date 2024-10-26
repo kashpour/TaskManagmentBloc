@@ -27,9 +27,6 @@ final class TaskCompletedButtonPressedEvent extends TaskEvent {
 
   TaskCompletedButtonPressedEvent({required this.task});
 }
-
-final class TaskNavigateToCompletedTasksButtonPressedEvent extends TaskEvent {}
-
 final class TaskAddNewTaskEvent extends TaskEvent {
   final String title;
   final String description;

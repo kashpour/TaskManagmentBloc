@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/auth/bloc/auth_bloc.dart';
-import 'package:task_managment_bloc/features/auth/view/signup/signup_view.dart';
-import 'package:task_managment_bloc/utils/constants/my_colors.dart';
 
+import '../../../../utils/constants/my_colors.dart';
 import '../../../home/view/home_view.dart';
+import '../../bloc/auth_bloc.dart';
+import '../signup/signup_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});

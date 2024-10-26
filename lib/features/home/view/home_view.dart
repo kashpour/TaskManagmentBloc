@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/home/models/task_model.dart';
-import 'package:task_managment_bloc/features/home/view/widgets/custom_task_widget.dart';
+import '../models/task_model.dart';
+import 'widgets/custom_task_widget.dart';
 
 import '../../../utils/constants/my_colors.dart';
 import '../../auth/view/login/login_view.dart';
@@ -123,11 +123,7 @@ class HomeView extends StatelessWidget {
         ),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
-            if (state is TaskLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is TaskLoadedSuccessState) {
+            if (state is TaskLoadedSuccessState) {
               return ListView.builder(
                   itemCount: state.taskModel.length,
                   itemBuilder: (context, index) {

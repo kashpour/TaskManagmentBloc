@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/data/repositories/auth_repo.dart';
-import 'package:task_managment_bloc/data/repositories/task_repo.dart';
-import 'package:task_managment_bloc/features/auth/bloc/auth_bloc.dart';
-import 'package:task_managment_bloc/features/auth/view/auth_view.dart';
+import 'data/repositories/auth_repo.dart';
+import 'data/repositories/task_repo.dart';
+import 'features/auth/bloc/auth_bloc.dart';
+import 'features/auth/view/auth_view.dart';
 
 import 'features/home/bloc/task_bloc.dart';
 

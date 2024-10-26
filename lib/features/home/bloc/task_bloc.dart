@@ -13,7 +13,6 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final AuthRepo authRepo;
   final TaskRepo taskRepo;
-
   TaskBloc({required this.authRepo, required this.taskRepo})
       : super(TaskInitial()) {
     on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
@@ -68,8 +67,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ).toList();
         return TaskLoadedSuccessState(
             taskModel: tasks,
-            email: authRepo.getCurrentUser()!,
-            userName: authRepo.getCurrentUser()!.split('@')[0]);
+            email: authRepo.getUserInfo().email!,
+            userName: authRepo.getUserInfo().username!);
       });
       await emit.forEach(taskStream, onData: (state) => state);
     } catch (e) {
@@ -90,7 +89,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskUpdatedTaskEvent(
       TaskUpdatedTaskEvent event, Emitter<TaskState> emit) {
     taskRepo.updateTask(event.task, event.documentId);
-    emit(TaskUpdateTaskState());
   }
 
   FutureOr<void> _taskCompletedButtonPressedEvent(
@@ -116,8 +114,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ).toList();
         return TaskLoadedSuccessState(
             taskModel: tasks,
-            email: authRepo.getCurrentUser()!,
-            userName: authRepo.getCurrentUser()!.split('@')[0]);
+            email: authRepo.getUserInfo().email!,
+            userName: authRepo.getUserInfo().username!);
       });
       await emit.forEach(taskStream, onData: (state) => state);
     } catch (e) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/home/models/task_model.dart';
+import '../../models/task_model.dart';
 
 import '../../../../utils/constants/my_colors.dart';
 import '../../bloc/task_bloc.dart';

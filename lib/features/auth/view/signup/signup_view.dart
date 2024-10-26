@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/auth/view/login/login_view.dart';
+import '../login/login_view.dart';
 
 import '../../../../utils/constants/my_colors.dart';
 import '../../bloc/auth_bloc.dart';
