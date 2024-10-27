@@ -23,14 +23,19 @@ class SignupView extends StatelessWidget {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginView()));
         } else if (state is AuthSignupState) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(
-                content: Text('You Signed up successfully. Please login'),
-                duration: Duration(seconds: 1),
-              ))
-              .close;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('You Signed up successfully. Please login'),
+            duration: Duration.zero,
+          ));
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginView()));
+        } else if (state is AuthLoadedFailureSate) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(
+                content: Text(state.failureMessage),
+                duration: const Duration(seconds: 1),
+              ))
+              .close;
         }
       },
       child: Scaffold(
