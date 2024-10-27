@@ -5,14 +5,22 @@ import '../../../utils/constants/my_colors.dart';
 import '../bloc/auth_bloc.dart';
 import 'login/login_view.dart';
 
-class AuthView extends StatelessWidget {
+class AuthView extends StatefulWidget {
   const AuthView({super.key});
 
   @override
+  State<AuthView> createState() => _AuthViewState();
+}
+
+class _AuthViewState extends State<AuthView> {
+  @override
+  void initState() {
+    context.read<AuthBloc>().add(AuthInitialEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    context.read<AuthBloc>().add(AuthInitialEvent());
-
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoadedSuccessState) {

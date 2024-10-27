@@ -18,7 +18,9 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TaskBloc>().add(TaskFetchTasksEvent());
+    context
+        .read<TaskBloc>()
+        .add(TaskFetchTasksEvent(isTaskCompleteEvent: false));
 
     return BlocListener<TaskBloc, TaskState>(
       listener: (context, state) {
@@ -33,10 +35,14 @@ class HomeView extends StatelessWidget {
           txtDescription.clear();
           txtDateTime.clear();
         } else if (state is TaskAddNewTaskDialogState) {
-          context.read<TaskBloc>().add(TaskFetchTasksEvent());
+          context
+              .read<TaskBloc>()
+              .add(TaskFetchTasksEvent(isTaskCompleteEvent: false));
           customShowDialog(context, true, '');
         } else if (state is TaskUpdateTaskDialogState) {
-          context.read<TaskBloc>().add(TaskFetchTasksEvent());
+          context
+              .read<TaskBloc>()
+              .add(TaskFetchTasksEvent(isTaskCompleteEvent: false));
           txtTitle.text = state.task.title;
           txtDescription.text = state.task.description;
           txtDateTime.text = state.task.dateTime;
@@ -55,70 +61,99 @@ class HomeView extends StatelessWidget {
           child: const Icon(Icons.add, size: 28.0, color: Colors.white),
         ),
         appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () =>
-                  context.read<TaskBloc>().add(TaskLogOutButtonPressedEvent()),
-              icon: const Icon(Icons.logout, size: 32.0, color: Colors.black),
-            )
-          ],
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(color: mainColor),
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 10.0),
-                  const CircleAvatar(child: Icon(Icons.person)),
-                  const SizedBox(width: 20.0),
-                  BlocBuilder<TaskBloc, TaskState>(
-                    builder: (context, state) {
-                      String email = '';
-                      String userName = '';
-                      if (state is TaskLoadedSuccessState) {
-                        email = state.email;
-                        userName = state.userName;
-                      }
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            userName,
-                            style: const TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            email,
-                            style: const TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    const CircleAvatar(child: Icon(Icons.person)),
+                    const SizedBox(width: 10),
+                    BlocBuilder<TaskBloc, TaskState>(
+                      builder: (context, state) {
+                        String email = '';
+                        String userName = '';
+                        if (state is TaskLoadedSuccessState) {
+                          email = state.email;
+                          userName = state.userName;
+                        }
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userName,
+                              style: const TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              email,
+                              style: const TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                IconButton(
+                  onPressed: () => context
+                      .read<TaskBloc>()
+                      .add(TaskLogOutButtonPressedEvent()),
+                  icon:
+                      const Icon(Icons.logout, size: 32.0, color: Colors.black),
+                )
+              ],
             ),
           ),
           bottom: PreferredSize(
-              preferredSize: const Size(100, 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        context.read<TaskBloc>().add(TaskFetchTasksEvent());
-                      },
-                      child: const Text('Tasks')),
-                  TextButton(
-                      onPressed: () {
-                        context
-                            .read<TaskBloc>()
-                            .add(TaskFetchComletedTasksEvent());
-                      },
-                      child: const Text('Comleted Task')),
-                ],
+              preferredSize: const Size(60, 60),
+              child: BlocBuilder<TaskBloc, TaskState>(
+                builder: (context, state) {
+                  bool isTaskComplete = false;
+                  if (state is TaskLoadedSuccessState) {
+                    isTaskComplete = state.isTaskComplete;
+                  }
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor:
+                                  isTaskComplete ? mainColor : whiteColor,
+                              fixedSize: const Size(200, 20)),
+                          onPressed: () {
+                            context.read<TaskBloc>().add(TaskFetchTasksEvent(
+                                isTaskCompleteEvent: false));
+                          },
+                          child: const Text(
+                            'Tasks',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          )),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor:
+                                  !isTaskComplete ? mainColor : whiteColor,
+                              fixedSize: const Size(200, 20)),
+                          onPressed: () {
+                            context.read<TaskBloc>().add(
+                                TaskFetchTasksEvent(isTaskCompleteEvent: true));
+                          },
+                          child: const Text('Comleted Task',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0))),
+                    ],
+                  );
+                },
               )),
         ),
         body: BlocBuilder<TaskBloc, TaskState>(
@@ -129,6 +164,7 @@ class HomeView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return CustomTaskWidget(
                       task: state.taskModel[index],
+                      isTaskComplete: state.isTaskComplete,
                     );
                   });
             } else if (state is TaskFailureSate) {

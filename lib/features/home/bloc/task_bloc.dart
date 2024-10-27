@@ -15,15 +15,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final TaskRepo taskRepo;
   TaskBloc({required this.authRepo, required this.taskRepo})
       : super(TaskInitial()) {
-    on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
-    on<TaskAddNewTaskButtonPressedEvent>(_taskAddNewTaskButtonPressedEvent);
-    on<TaskAddNewTaskEvent>(_taskAddNewTaskEvent);
     on<TaskFetchTasksEvent>(_taskFetchTasksEvent);
+    on<TaskAddNewTaskEvent>(_taskAddNewTaskEvent);
+    on<TaskUpdatedTaskEvent>(_taskUpdatedTaskEvent);
+
+    on<TaskAddNewTaskButtonPressedEvent>(_taskAddNewTaskButtonPressedEvent);
     on<TaskDeleteTaskButtonPressedEvent>(_taskDeleteTaskButtonPressedEvent);
     on<TaskUpdateTaskButtonPressedEvent>(_taskUpdateTaskButtonPressedEvent);
-    on<TaskUpdatedTaskEvent>(_taskUpdatedTaskEvent);
     on<TaskCompletedButtonPressedEvent>(_taskCompletedButtonPressedEvent);
-    on<TaskFetchComletedTasksEvent>(_taskFetchComletedTasksEvent);
+    on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
   }
 
   FutureOr<void> _taskLogOutButtonPressedEvent(
@@ -38,9 +38,41 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
+  FutureOr<void> _taskFetchTasksEvent(
+      TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
+    try {
+      final taskStream = taskRepo.loadTask().map((snapshot) {
+        final tasks =
+            snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
+          (element) {
+            return element.isCompleted == event.isTaskCompleteEvent;
+          },
+        ).toList();
+        return TaskLoadedSuccessState(
+            taskModel: tasks,
+            email: authRepo.getUserInfo().email!,
+            userName: authRepo.getUserInfo().username!,
+            isTaskComplete: event.isTaskCompleteEvent);
+      });
+      await emit.forEach(taskStream, onData: (state) => state);
+    } catch (e) {
+      emit(TaskFailureSate(failureMessage: e.toString()));
+    }
+  }
+
   FutureOr<void> _taskAddNewTaskButtonPressedEvent(
       TaskAddNewTaskButtonPressedEvent event, Emitter<TaskState> emit) {
     emit(TaskAddNewTaskDialogState());
+  }
+
+  FutureOr<void> _taskDeleteTaskButtonPressedEvent(
+      TaskDeleteTaskButtonPressedEvent event, Emitter<TaskState> emit) {
+    taskRepo.deleteTask(event.taskID);
+  }
+
+  FutureOr<void> _taskUpdateTaskButtonPressedEvent(
+      TaskUpdateTaskButtonPressedEvent event, Emitter<TaskState> emit) {
+    emit(TaskUpdateTaskDialogState(task: event.task));
   }
 
   FutureOr<void> _taskAddNewTaskEvent(
@@ -53,37 +85,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
     taskRepo.addTask(newTask);
     emit(TaskAddNewTaskState());
-  }
-
-  FutureOr<void> _taskFetchTasksEvent(
-      TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
-    try {
-      final taskStream = taskRepo.loadTask().map((snapshot) {
-        final tasks =
-            snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
-          (element) {
-            return element.isCompleted != true;
-          },
-        ).toList();
-        return TaskLoadedSuccessState(
-            taskModel: tasks,
-            email: authRepo.getUserInfo().email!,
-            userName: authRepo.getUserInfo().username!);
-      });
-      await emit.forEach(taskStream, onData: (state) => state);
-    } catch (e) {
-      emit(TaskFailureSate(failureMessage: e.toString()));
-    }
-  }
-
-  FutureOr<void> _taskDeleteTaskButtonPressedEvent(
-      TaskDeleteTaskButtonPressedEvent event, Emitter<TaskState> emit) {
-    taskRepo.deleteTask(event.taskID);
-  }
-
-  FutureOr<void> _taskUpdateTaskButtonPressedEvent(
-      TaskUpdateTaskButtonPressedEvent event, Emitter<TaskState> emit) {
-    emit(TaskUpdateTaskDialogState(task: event.task));
   }
 
   FutureOr<void> _taskUpdatedTaskEvent(
@@ -100,26 +101,5 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
     taskRepo.updateTask(event.task, event.task.id);
     emit(TaskUpdateTaskState());
-  }
-
-  FutureOr<void> _taskFetchComletedTasksEvent(
-      TaskFetchComletedTasksEvent event, Emitter<TaskState> emit) async {
-    try {
-      final taskStream = taskRepo.loadTask().map((snapshot) {
-        final tasks =
-            snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
-          (element) {
-            return element.isCompleted == true;
-          },
-        ).toList();
-        return TaskLoadedSuccessState(
-            taskModel: tasks,
-            email: authRepo.getUserInfo().email!,
-            userName: authRepo.getUserInfo().username!);
-      });
-      await emit.forEach(taskStream, onData: (state) => state);
-    } catch (e) {
-      emit(TaskFailureSate(failureMessage: e.toString()));
-    }
   }
 }

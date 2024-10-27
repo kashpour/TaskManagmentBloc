@@ -7,10 +7,12 @@ import '../../bloc/task_bloc.dart';
 
 class CustomTaskWidget extends StatelessWidget {
   const CustomTaskWidget({
-    super.key, required this.task,
-   
+    super.key,
+    required this.task,
+    required this.isTaskComplete,
   });
   final TaskModel task;
+  final bool isTaskComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +37,21 @@ class CustomTaskWidget extends StatelessWidget {
                 task.title,
                 style: const TextStyle(
                   fontSize: 20.0,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 task.description,
                 style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 16.0,
                 ),
               ),
               Text(
                 task.dateTime,
                 style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 16.0,
                 ),
               ),
@@ -54,26 +59,22 @@ class CustomTaskWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white),
-                  child: IconButton(
-                      onPressed: () {
-                        context
-                            .read<TaskBloc>()
-                            .add(TaskCompletedButtonPressedEvent(task: task));
-                      },
-                      icon: const Icon(
-                        Icons.done,
-                      ))),
               IconButton(
                   onPressed: () {
                     context
                         .read<TaskBloc>()
-                        .add(TaskUpdateTaskButtonPressedEvent(task: task, documentId: task.id));
+                        .add(TaskCompletedButtonPressedEvent(task: task));
+                  },
+                  icon: Icon(
+                    Icons.check_circle_rounded,
+                    size: 38.0,
+                    color: isTaskComplete ? Colors.green : Colors.white,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    context.read<TaskBloc>().add(
+                        TaskUpdateTaskButtonPressedEvent(
+                            task: task, documentId: task.id));
                   },
                   icon: Icon(
                     Icons.edit_document,

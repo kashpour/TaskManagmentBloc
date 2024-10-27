@@ -27,6 +27,7 @@ final class TaskCompletedButtonPressedEvent extends TaskEvent {
 
   TaskCompletedButtonPressedEvent({required this.task});
 }
+
 final class TaskAddNewTaskEvent extends TaskEvent {
   final String title;
   final String description;
@@ -40,9 +41,13 @@ final class TaskAddNewTaskEvent extends TaskEvent {
       required this.isCompleted});
 }
 
-final class TaskFetchTasksEvent extends TaskEvent {}
+final class TaskFetchTasksEvent extends TaskEvent {
+  final bool isTaskCompleteEvent;
 
-final class TaskFetchComletedTasksEvent extends TaskEvent{}
+  TaskFetchTasksEvent({required this.isTaskCompleteEvent});
+}
+
+final class TaskFetchComletedTasksEvent extends TaskEvent {}
 
 final class TaskUpdatedTaskEvent extends TaskEvent {
   final TaskModel task;

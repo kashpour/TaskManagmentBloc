@@ -9,9 +9,13 @@ final class TaskLoadedSuccessState extends TaskState {
   final List<TaskModel> taskModel;
   final String email;
   final String userName;
+  final bool isTaskComplete;
 
   TaskLoadedSuccessState(
-      {required this.taskModel, required this.email, required this.userName});
+      {required this.taskModel,
+      required this.email,
+      required this.userName,
+      required this.isTaskComplete});
 }
 
 final class TaskFailureSate extends TaskState {
@@ -24,6 +28,8 @@ final class UserLogOutState extends TaskState {}
 
 final class TaskAddNewTaskState extends TaskState {}
 
+final class TaskUpdateTaskState extends TaskState {}
+
 final class TaskAddNewTaskDialogState extends TaskState {}
 
 final class TaskUpdateTaskDialogState extends TaskState {
@@ -31,5 +37,3 @@ final class TaskUpdateTaskDialogState extends TaskState {
 
   TaskUpdateTaskDialogState({required this.task});
 }
-
-final class TaskUpdateTaskState extends TaskState {}

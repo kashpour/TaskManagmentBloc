@@ -13,8 +13,6 @@ abstract class TaskRepo {
 class DevTaskRepo implements TaskRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   AuthRepo authRepo = DevAuthRepo();
-  
-
   @override
   void addTask(TaskModel task) async {
     final String taskColectionName = authRepo.getUserInfo().email!;
