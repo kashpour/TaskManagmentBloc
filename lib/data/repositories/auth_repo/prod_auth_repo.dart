@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
-import 'package:task_managment_bloc/features/auth/models/user_model.dart';
+import 'auth_repo.dart';
+import '../../../features/auth/models/user_model.dart';
 
 import '../../../injectable/injectable.dart';
 

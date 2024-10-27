@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/injectable/injectable.dart';
-import 'package:task_managment_bloc/resources/app_bloc_observer.dart';
+import 'injectable/injectable.dart';
+import 'resources/app_bloc_observer.dart';
 import 'data/repositories/auth_repo/auth_repo.dart';
 import 'data/repositories/task_repo/task_repo.dart';
 import 'features/auth/bloc/auth_bloc.dart';

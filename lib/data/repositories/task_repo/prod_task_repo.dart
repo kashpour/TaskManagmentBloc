@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
+import '../auth_repo/auth_repo.dart';
 
 import '../../../features/home/models/task_model.dart';
 import '../../../injectable/injectable.dart';
