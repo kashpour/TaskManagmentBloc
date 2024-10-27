@@ -13,9 +13,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    txtEmail.text = 'test@gmail.com';
-    txtPassword.text = '123456';
-
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthNavigateToSignupState) {

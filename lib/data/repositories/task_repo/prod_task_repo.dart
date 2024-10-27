@@ -1,16 +1,15 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:injectable/injectable.dart';
 
-import '../../features/home/models/task_model.dart';
-import 'auth_repo.dart';
+import '../../../features/home/models/task_model.dart';
+import '../../../injectable/injectable.dart';
+import '../auth_repo/auth_repo.dart';
+import '../auth_repo/dev_auth_repo.dart';
+import 'task_repo.dart';
 
-abstract class TaskRepo {
-  void addTask(TaskModel task);
-  Stream<QuerySnapshot> loadTask();
-  void updateTask(TaskModel task, String documnetId);
-  void deleteTask(String documnetId);
-}
-
-class DevTaskRepo implements TaskRepo {
+@Injectable(as: TaskRepo, env: [Env.prod])
+class ProdTaskRepo implements TaskRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   AuthRepo authRepo = DevAuthRepo();
   @override

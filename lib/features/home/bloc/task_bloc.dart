@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
-import '../../../data/repositories/auth_repo.dart';
-import '../../../data/repositories/task_repo.dart';
+import '../../../data/repositories/auth_repo/auth_repo.dart';
+import '../../../data/repositories/task_repo/task_repo.dart';
 import '../models/task_model.dart';
 
 part 'task_event.dart';
 part 'task_state.dart';
 
+@Injectable()
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final AuthRepo authRepo;
   final TaskRepo taskRepo;

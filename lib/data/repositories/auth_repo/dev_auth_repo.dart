@@ -1,17 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 
-import '../../features/auth/models/user_model.dart';
-
-abstract class AuthRepo {
-  Future<UserCredential> lgoinWithEmailAndPassword(
-      String email, String password);
-  Future<UserCredential> signupWithEmailAndPassword(
-      String email, String password);
-  Future forgetUserPassword(String email);
-  UserModel getUserInfo();
-  void signOutUser();
-}
-
+import '../../../features/auth/models/user_model.dart';
+import '../../../injectable/injectable.dart';
+import 'auth_repo.dart';
+@Injectable(as: AuthRepo, env: [Env.dev])
 class DevAuthRepo implements AuthRepo {
   final _auth = FirebaseAuth.instance;
 
@@ -40,7 +33,7 @@ class DevAuthRepo implements AuthRepo {
       String email, String password) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+          email: 'admin@gmail.com', password: '123456');
       return authResult;
     } on FirebaseAuthException catch (e) {
       throw Exception(_getFirebaseAuthErrorMessage(e));
