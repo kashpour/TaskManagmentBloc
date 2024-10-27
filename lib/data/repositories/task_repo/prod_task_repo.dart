@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
@@ -7,7 +6,7 @@ import '../../../features/home/models/task_model.dart';
 import '../../../injectable/injectable.dart';
 import 'task_repo.dart';
 
-@Injectable(as: TaskRepo, env: [Env.prod])
+@Singleton(as: TaskRepo, env: [Env.prod])
 class ProdTaskRepo implements TaskRepo {
   final AuthRepo prodAuthRepo;
 

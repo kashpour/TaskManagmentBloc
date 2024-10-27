@@ -5,7 +5,7 @@ import '../../../features/home/models/task_model.dart';
 import '../../../injectable/injectable.dart';
 import 'task_repo.dart';
 
-@Injectable(as: TaskRepo, env: [Env.dev])
+@Singleton(as: TaskRepo, env: [Env.dev])
 class DevTaskRepo implements TaskRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String taskColectionName = 'development'; // testing for development

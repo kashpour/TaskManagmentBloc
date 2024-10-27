@@ -14,6 +14,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Bloc.observer = AppBlocObserver();
+
+  configureDependencies(Env.prod);
+
   runApp(const MyApp());
 }
 

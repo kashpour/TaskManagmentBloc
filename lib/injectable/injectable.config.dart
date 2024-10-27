@@ -34,17 +34,17 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.factory<_i657.AuthRepo>(
+    gh.singleton<_i657.AuthRepo>(
       () => _i625.DevAuthRepo(),
       registerFor: {_dev},
     );
-    gh.factory<_i858.TaskRepo>(
+    gh.singleton<_i858.TaskRepo>(
       () => _i491.DevTaskRepo(),
       registerFor: {_dev},
     );
     gh.factory<_i275.AuthBloc>(
         () => _i275.AuthBloc(authRepo: gh<_i657.AuthRepo>()));
-    gh.factory<_i657.AuthRepo>(
+    gh.singleton<_i657.AuthRepo>(
       () => _i800.ProdAuthRepo(),
       registerFor: {_prod},
     );
@@ -52,7 +52,7 @@ extension GetItInjectableX on _i174.GetIt {
           authRepo: gh<_i657.AuthRepo>(),
           taskRepo: gh<_i858.TaskRepo>(),
         ));
-    gh.factory<_i858.TaskRepo>(
+    gh.singleton<_i858.TaskRepo>(
       () => _i219.ProdTaskRepo(prodAuthRepo: gh<_i657.AuthRepo>()),
       registerFor: {_prod},
     );

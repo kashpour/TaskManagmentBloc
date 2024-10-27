@@ -5,7 +5,7 @@ import 'package:task_managment_bloc/features/auth/models/user_model.dart';
 
 import '../../../injectable/injectable.dart';
 
-@Injectable(as: AuthRepo, env: [Env.prod])
+@Singleton(as: AuthRepo, env: [Env.prod])
 class ProdAuthRepo implements AuthRepo {
   final _auth = FirebaseAuth.instance;
 
