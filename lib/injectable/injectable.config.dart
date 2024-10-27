@@ -48,14 +48,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i800.ProdAuthRepo(),
       registerFor: {_prod},
     );
-    gh.factory<_i858.TaskRepo>(
-      () => _i219.ProdTaskRepo(),
-      registerFor: {_prod},
-    );
     gh.factory<_i665.TaskBloc>(() => _i665.TaskBloc(
           authRepo: gh<_i657.AuthRepo>(),
           taskRepo: gh<_i858.TaskRepo>(),
         ));
+    gh.factory<_i858.TaskRepo>(
+      () => _i219.ProdTaskRepo(prodAuthRepo: gh<_i657.AuthRepo>()),
+      registerFor: {_prod},
+    );
     return this;
   }
 }

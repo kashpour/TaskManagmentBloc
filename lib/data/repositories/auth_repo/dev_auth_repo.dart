@@ -33,7 +33,7 @@ class DevAuthRepo implements AuthRepo {
       String email, String password) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(
-          email: 'admin@gmail.com', password: '123456');
+          email: 'admin@gmail.com', password: '123456'); // testing for development
       return authResult;
     } on FirebaseAuthException catch (e) {
       throw Exception(_getFirebaseAuthErrorMessage(e));

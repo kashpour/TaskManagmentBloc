@@ -8,7 +8,7 @@ import 'task_repo.dart';
 @Injectable(as: TaskRepo, env: [Env.dev])
 class DevTaskRepo implements TaskRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static const String taskColectionName = 'devlopment';
+  static const String taskColectionName = 'development'; // testing for development
 
   @override
   void addTask(TaskModel task) async {

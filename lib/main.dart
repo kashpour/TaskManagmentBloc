@@ -10,7 +10,7 @@ import 'features/auth/view/auth_view.dart';
 
 import 'features/home/bloc/task_bloc.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Bloc.observer = AppBlocObserver();
@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-  
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => AuthBloc(authRepo: getIt<AuthRepo>()),
         ),
         BlocProvider(
-          create: (context) => TaskBloc(authRepo:  getIt<AuthRepo>(), taskRepo:  getIt<TaskRepo>()),
+          create: (context) => TaskBloc(
+              authRepo: getIt<AuthRepo>(), taskRepo: getIt<TaskRepo>()),
         ),
       ],
       child: const MaterialApp(
