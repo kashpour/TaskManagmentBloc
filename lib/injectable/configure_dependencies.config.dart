@@ -12,7 +12,6 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../data/repositories/auth_repo/auth_repo.dart' as _i657;
-import '../data/repositories/auth_repo/prod_auth_repo.dart' as _i800;
 import '../data/repositories/task_repo/task_repo.dart' as _i858;
 import '../features/auth/bloc/auth_bloc.dart' as _i275;
 import '../features/home/bloc/task_bloc.dart' as _i665;
@@ -47,12 +46,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => authModule.prodAuthRepo(),
       registerFor: {_prod},
     );
-    gh.factory<_i275.AuthBloc>(
-        () => _i275.AuthBloc(authRepo: gh<_i657.AuthRepo>()));
     gh.lazySingleton<_i858.TaskRepo>(
-      () => taskModule.proTaskRepo(gh<_i800.ProdAuthRepo>()),
+      () => taskModule.proTaskRepo(),
       registerFor: {_prod},
     );
+    gh.factory<_i275.AuthBloc>(
+        () => _i275.AuthBloc(authRepo: gh<_i657.AuthRepo>()));
     gh.factory<_i665.TaskBloc>(() => _i665.TaskBloc(
           authRepo: gh<_i657.AuthRepo>(),
           taskRepo: gh<_i858.TaskRepo>(),

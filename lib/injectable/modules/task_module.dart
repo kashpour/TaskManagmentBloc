@@ -12,6 +12,5 @@ abstract class TaskModule {
 
   @prod
   @lazySingleton
-  TaskRepo proTaskRepo(ProdAuthRepo prodAuthRepo) =>
-      ProdTaskRepo(prodAuthRepo: prodAuthRepo);
+  TaskRepo proTaskRepo() => ProdTaskRepo(prodAuthRepo: ProdAuthRepo());
 }
