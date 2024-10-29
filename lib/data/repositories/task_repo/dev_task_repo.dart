@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../../features/home/models/task_model.dart';
-import '../../../injectable/configure_dependencies.dart';
 import 'task_repo.dart';
 
-@Singleton(as: TaskRepo, env: [Env.dev])
 class DevTaskRepo implements TaskRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static const String taskColectionName = 'development'; // testing for development
+  static const String taskColectionName =
+      'development'; // testing for development
 
   @override
   void addTask(TaskModel task) async {

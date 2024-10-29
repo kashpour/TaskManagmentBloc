@@ -4,7 +4,7 @@ import 'package:task_managment_bloc/data/repositories/auth_repo/dev_auth_repo.da
 import 'package:task_managment_bloc/data/repositories/auth_repo/prod_auth_repo.dart';
 
 @module
-abstract class AuthRepoModule {
+abstract class AuthModule {
   @dev
   @lazySingleton
   AuthRepo devAuthRepo() => DevAuthRepo();
