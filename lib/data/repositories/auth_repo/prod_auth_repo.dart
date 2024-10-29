@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'auth_repo.dart';
 import '../../../features/auth/models/user_model.dart';
 
-import '../../../injectable/injectable.dart';
+import '../../../injectable/configure_dependencies.dart';
 
 @Singleton(as: AuthRepo, env: [Env.prod])
 class ProdAuthRepo implements AuthRepo {

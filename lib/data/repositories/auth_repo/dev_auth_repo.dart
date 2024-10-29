@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../features/auth/models/user_model.dart';
-import '../../../injectable/injectable.dart';
+import '../../../injectable/configure_dependencies.dart';
 import 'auth_repo.dart';
 
 @Singleton(as: AuthRepo, env: [Env.dev])
