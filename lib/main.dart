@@ -9,13 +9,12 @@ import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/view/auth_view.dart';
 
 import 'features/home/bloc/task_bloc.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Bloc.observer = AppBlocObserver();
 
-  configureDependencies(Env.prod);
+  configureDependencies(Env.dev);
 
   runApp(const MyApp());
 }

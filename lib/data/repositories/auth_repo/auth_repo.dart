@@ -11,4 +11,3 @@ abstract class AuthRepo {
   UserModel getUserInfo();
   void signOutUser();
 }
-
