@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_repo.dart';
 import '../../../features/auth/models/user_model.dart';
 
-
 class ProdAuthRepo implements AuthRepo {
   final _auth = FirebaseAuth.instance;
 
@@ -49,6 +48,8 @@ class ProdAuthRepo implements AuthRepo {
 
   String _getFirebaseAuthErrorMessage(FirebaseAuthException e) {
     switch (e.code) {
+      case 'missing-email':
+        return 'Please Provide an email address to reset your password';
       case 'email-already-in-use':
         return 'This email is already in use. Please try another email.';
       case 'invalid-email':

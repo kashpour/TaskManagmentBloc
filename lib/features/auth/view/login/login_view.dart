@@ -13,6 +13,7 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthBloc authBloc = context.read<AuthBloc>();
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthNavigateToSignupState) {
@@ -142,7 +143,7 @@ class LoginView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12)),
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      context.read<AuthBloc>().add(
+                                      authBloc.add(
                                           AuthPasswordRevealIconButtonPressedEvent(
                                               isObscure: isObscurePassword));
                                     },
@@ -164,7 +165,7 @@ class LoginView extends StatelessWidget {
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width, 50)),
                             onPressed: () {
-                              context.read<AuthBloc>().add(
+                              authBloc.add(
                                   AuthLoginButtonPressedEvent(
                                       email: txtEmail.text,
                                       password: txtPassword.text));
@@ -181,9 +182,9 @@ class LoginView extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              GestureDetector(
+                              InkWell(
                                 onTap: () {
-                                  context.read<AuthBloc>().add(
+                                  authBloc.add(
                                       AuthForgetPasswordButtonPressedEvent(
                                           email: txtEmail.text));
                                 },
@@ -213,7 +214,7 @@ class LoginView extends StatelessWidget {
                               ),
                               GestureDetector(
                                   onTap: () {
-                                    context.read<AuthBloc>().add(
+                                    authBloc.add(
                                         AuthNavigateToSignupPressedEvent());
                                   },
                                   child: const Text(

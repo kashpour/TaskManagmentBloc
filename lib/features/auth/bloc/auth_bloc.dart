@@ -60,9 +60,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _authForgetPasswordButtonPressedEvent(
-      AuthForgetPasswordButtonPressedEvent event, Emitter<AuthState> emit) {
-    authRepo.forgetUserPassword(event.email);
-    emit(AuthForgetPasswordState());
+      AuthForgetPasswordButtonPressedEvent event, Emitter<AuthState> emit) async{
+    try {
+      await authRepo.forgetUserPassword(event.email);
+      emit(AuthForgetPasswordState());
+    } catch (e) {
+      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _authPasswordRevealIconButtonPressedEvent(

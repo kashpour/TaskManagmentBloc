@@ -10,8 +10,10 @@ class CustomTaskWidget extends StatelessWidget {
     super.key,
     required this.task,
     required this.isTaskComplete,
+    required this.taskBloc
   });
   final TaskModel task;
+  final TaskBloc taskBloc;
   final bool isTaskComplete;
 
   @override
@@ -72,7 +74,7 @@ class CustomTaskWidget extends StatelessWidget {
                   )),
               IconButton(
                   onPressed: () {
-                    context.read<TaskBloc>().add(
+                    taskBloc.add(
                         TaskUpdateTaskButtonPressedEvent(
                             task: task, documentId: task.id));
                   },

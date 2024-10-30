@@ -14,6 +14,7 @@ class SignupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthBloc authBloc = context.read<AuthBloc>();
     txtEmail.text = 'test@gmail.com';
     txtPassword.text = '123456';
 
@@ -142,7 +143,7 @@ class SignupView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12)),
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      context.read<AuthBloc>().add(
+                                      authBloc.add(
                                           AuthPasswordRevealIconButtonPressedEvent(
                                               isObscure: isObscurePassword));
                                     },
@@ -164,7 +165,7 @@ class SignupView extends StatelessWidget {
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width, 50)),
                             onPressed: () {
-                              context.read<AuthBloc>().add(
+                              authBloc.add(
                                   AuthSignupButtonPressedEvent(
                                       email: txtEmail.text,
                                       password: txtPassword.text));
