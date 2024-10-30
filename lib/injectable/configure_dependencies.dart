@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:task_managment_bloc/injectable/configure_dependencies.config.dart';
+import 'configure_dependencies.config.dart';
 
 final getIt = GetIt.instance;
 @InjectableInit(
