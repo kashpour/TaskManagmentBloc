@@ -165,10 +165,10 @@ class LoginView extends StatelessWidget {
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width, 50)),
                             onPressed: () {
-                              authBloc.add(
-                                  AuthLoginButtonPressedEvent(
-                                      email: txtEmail.text,
-                                      password: txtPassword.text));
+                              print('event is triggered');
+                              authBloc.add(AuthLoginButtonPressedEvent(
+                                  email: txtEmail.text,
+                                  password: txtPassword.text));
                             },
                             child: const Text(
                               'Log in',
