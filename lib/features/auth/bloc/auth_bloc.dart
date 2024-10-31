@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-@Injectable()
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo authRepo;
   AuthBloc({required this.authRepo}) : super(AuthInitialState()) {

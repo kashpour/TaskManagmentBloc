@@ -13,8 +13,6 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../data/repositories/auth_repo/auth_repo.dart' as _i657;
 import '../data/repositories/task_repo/task_repo.dart' as _i858;
-import '../features/auth/bloc/auth_bloc.dart' as _i275;
-import '../features/home/bloc/task_bloc.dart' as _i665;
 import 'modules/auth_repo_module.dart' as _i763;
 import 'modules/task_module.dart' as _i293;
 
@@ -50,12 +48,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => taskModule.proTaskRepo(),
       registerFor: {_prod},
     );
-    gh.factory<_i275.AuthBloc>(
-        () => _i275.AuthBloc(authRepo: gh<_i657.AuthRepo>()));
-    gh.factory<_i665.TaskBloc>(() => _i665.TaskBloc(
-          authRepo: gh<_i657.AuthRepo>(),
-          taskRepo: gh<_i858.TaskRepo>(),
-        ));
     return this;
   }
 }
