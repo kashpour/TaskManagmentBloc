@@ -34,19 +34,19 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final authModule = _$AuthModule();
     final taskModule = _$TaskModule();
-    gh.lazySingleton<_i657.AuthRepo>(
+    gh.factory<_i657.AuthRepo>(
       () => authModule.devAuthRepo(),
       registerFor: {_dev},
     );
-    gh.lazySingleton<_i858.TaskRepo>(
+    gh.factory<_i858.TaskRepo>(
       () => taskModule.devTaskRepo(),
       registerFor: {_dev},
     );
-    gh.lazySingleton<_i657.AuthRepo>(
+    gh.factory<_i657.AuthRepo>(
       () => authModule.prodAuthRepo(),
       registerFor: {_prod},
     );
-    gh.lazySingleton<_i858.TaskRepo>(
+    gh.factory<_i858.TaskRepo>(
       () => taskModule.proTaskRepo(),
       registerFor: {_prod},
     );
