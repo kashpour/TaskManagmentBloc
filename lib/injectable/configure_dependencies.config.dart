@@ -30,28 +30,28 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    final authModule = _$AuthModule();
     final taskModule = _$TaskModule();
-    gh.factory<_i657.AuthRepo>(
-      () => authModule.devAuthRepo(),
-      registerFor: {_dev},
-    );
+    final authModule = _$AuthModule();
     gh.factory<_i858.TaskRepo>(
       () => taskModule.devTaskRepo(),
       registerFor: {_dev},
     );
     gh.factory<_i657.AuthRepo>(
-      () => authModule.prodAuthRepo(),
-      registerFor: {_prod},
+      () => authModule.devAuthRepo(),
+      registerFor: {_dev},
     );
     gh.factory<_i858.TaskRepo>(
       () => taskModule.proTaskRepo(),
+      registerFor: {_prod},
+    );
+    gh.factory<_i657.AuthRepo>(
+      () => authModule.prodAuthRepo(),
       registerFor: {_prod},
     );
     return this;
   }
 }
 
-class _$AuthModule extends _i763.AuthModule {}
-
 class _$TaskModule extends _i293.TaskModule {}
+
+class _$AuthModule extends _i763.AuthModule {}

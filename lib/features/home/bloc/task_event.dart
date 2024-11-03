@@ -49,6 +49,8 @@ final class TaskFetchTasksEvent extends TaskEvent {
 
 final class TaskFetchComletedTasksEvent extends TaskEvent {}
 
+final class DeleteUserAccountEvent extends TaskEvent{}
+
 final class TaskUpdatedTaskEvent extends TaskEvent {
   final TaskModel task;
   final String documentId;

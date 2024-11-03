@@ -165,7 +165,6 @@ class LoginView extends StatelessWidget {
                                 fixedSize: Size(
                                     MediaQuery.of(context).size.width, 50)),
                             onPressed: () {
-                              print('event is triggered');
                               authBloc.add(AuthLoginButtonPressedEvent(
                                   email: txtEmail.text,
                                   password: txtPassword.text));

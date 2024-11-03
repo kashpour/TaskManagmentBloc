@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../features/auth/models/user_model.dart';
@@ -10,6 +11,7 @@ abstract class AuthRepo {
   Future forgetUserPassword(String email);
   UserModel getUserInfo();
   void signOutUser();
+  Future<void> deleteUser();
 }
 
 class ProdAuthRepo implements AuthRepo {
@@ -79,6 +81,17 @@ class ProdAuthRepo implements AuthRepo {
   void signOutUser() async {
     await _auth.signOut();
   }
+
+ 
+
+    @override
+  Future<void> deleteUser() async {
+    final FirebaseFirestore firestore =  FirebaseFirestore.instance;
+    final String taskColectionName = getUserInfo().email!;
+    firestore.collection(taskColectionName).doc().delete();
+    
+    await _auth.currentUser!.delete();
+  }
 }
 
 class DevAuthRepo implements AuthRepo {
@@ -147,4 +160,11 @@ class DevAuthRepo implements AuthRepo {
   void signOutUser() async {
     await _auth.signOut();
   }
+   @override
+  Future<void> deleteUser() {
+    // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+
 }

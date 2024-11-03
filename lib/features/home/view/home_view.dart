@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_managment_bloc/features/auth/bloc/auth_bloc.dart';
+import 'package:task_managment_bloc/main.dart';
 import '../models/task_model.dart';
 import 'widgets/custom_task_widget.dart';
 
@@ -51,6 +53,20 @@ class HomeView extends StatelessWidget {
         }
       },
       child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+            onTap: (value) {
+              if (value == 0) {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeView()));
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Settings()));
+              }
+            },
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
+            ]),
         floatingActionButton: FloatingActionButton(
           backgroundColor: mainColor,
           onPressed: () {
@@ -107,6 +123,12 @@ class HomeView extends StatelessWidget {
                       .add(TaskLogOutButtonPressedEvent()),
                   icon:
                       const Icon(Icons.logout, size: 32.0, color: Colors.black),
+                ),
+                IconButton(
+                  onPressed: () =>
+                      context.read<TaskBloc>().add(DeleteUserAccountEvent()),
+                  icon:
+                      const Icon(Icons.delete, size: 32.0, color: Colors.black),
                 )
               ],
             ),
@@ -267,5 +289,29 @@ class HomeView extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class Settings extends StatelessWidget {
+  const Settings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          TextButton(
+              onPressed: () {
+                context.read<TaskBloc>().add(DeleteUserAccountEvent());
+              },
+              child: const Text('Delete Account'))
+        ],
+        backgroundColor: mainColor,
+        title: const Text(
+          'Settings',
+          style: TextStyle(fontSize: 28.0, color: Colors.white),
+        ),
+      ),
+    );
   }
 }

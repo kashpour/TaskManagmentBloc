@@ -37,3 +37,5 @@ final class TaskUpdateTaskDialogState extends TaskState {
 
   TaskUpdateTaskDialogState({required this.task});
 }
+
+

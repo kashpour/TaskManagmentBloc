@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data/repositories/auth_repo/auth_repo.dart';
@@ -24,6 +25,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskUpdateTaskButtonPressedEvent>(_taskUpdateTaskButtonPressedEvent);
     on<TaskCompletedButtonPressedEvent>(_taskCompletedButtonPressedEvent);
     on<TaskLogOutButtonPressedEvent>(_taskLogOutButtonPressedEvent);
+    on<DeleteUserAccountEvent>(_deleteUserAccountEvent);
   }
 
   FutureOr<void> _taskLogOutButtonPressedEvent(
@@ -101,5 +103,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
     taskRepo.updateTask(event.task, event.task.id);
     emit(TaskUpdateTaskState());
+  }
+
+  void _deleteUserAccountEvent(
+      DeleteUserAccountEvent event, Emitter<TaskState> emit) {
+    try {
+      authRepo.deleteUser();
+      emit(UserLogOutState());
+    } catch (e) {
+      emit(TaskFailureSate(failureMessage: e.toString()));
+    }
   }
 }

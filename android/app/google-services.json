@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "502291000949",
+    "project_id": "taskmanagmentblocapp",
+    "storage_bucket": "taskmanagmentblocapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502291000949:android:4fb90cc2c93b9277e9523c",
+        "android_client_info": {
+          "package_name": "com.example.task_managment_bloc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEk3cny95bYQ1RZlp0fGXfoFZAlWlVuk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
