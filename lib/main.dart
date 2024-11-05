@@ -24,16 +24,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(authRepo: getIt<AuthRepo>()),
-        ),
-        BlocProvider<TaskBloc>(
-          create: (context) => TaskBloc(
-              authRepo: getIt<AuthRepo>(), taskRepo: getIt<TaskRepo>()),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => AuthBloc(authRepo: getIt<AuthRepo>()),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AuthView(),

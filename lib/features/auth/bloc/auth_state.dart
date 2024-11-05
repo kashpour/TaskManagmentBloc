@@ -3,7 +3,6 @@ part of 'auth_bloc.dart';
 @immutable
 sealed class AuthState extends Equatable {}
 
-//Initial States
 final class AuthInitialState extends AuthState {
   @override
   List<Object?> get props => [];

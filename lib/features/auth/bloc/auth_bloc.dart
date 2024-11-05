@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import '../../../data/repositories/auth_repo/auth_repo.dart';
@@ -12,7 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo authRepo;
   AuthBloc({required this.authRepo}) : super(AuthInitialState()) {
     on<AuthInitialEvent>(_authInitialEvent);
-    on<AuthNavigateToLoginPressedEvent>(_authNavigateToLoginPressedEvent);
+    on<AuthNavigateToLoginPressedEvent>(_authNavigateToLoginPressedEvent, transformer: droppable());
     on<AuthNavigateToSignupPressedEvent>(_authNavigateToSignupPressedEvent);
     on<AuthLoginButtonPressedEvent>(_authLoginButtonPressedEvent);
     on<AuthForgetPasswordButtonPressedEvent>(
