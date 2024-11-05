@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_managment_bloc/features/home/view/home_view.dart';
+import 'home_view.dart';
 
 import '../models/task_model.dart';
 import 'widgets/custom_task_widget.dart';
