@@ -41,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _authLoginButtonPressedEvent(
       AuthLoginButtonPressedEvent event, Emitter<AuthState> emit) async {
     try {
-      await authRepo.lgoinWithEmailAndPassword(event.email, event.password);
+      await authRepo.loginWithEmailAndPassword(email :event.email, password :event.password);
       emit(AuthLoadingState());
       emit(AuthLoginState());
     } catch (e) {

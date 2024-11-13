@@ -23,7 +23,7 @@ class LoginView extends StatelessWidget {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeView(),
+                builder: (context) => const HomeView(),
               ));
         } else if (state is AuthForgetPasswordState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

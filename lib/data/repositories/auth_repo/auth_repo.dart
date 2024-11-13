@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 
 import '../../../features/auth/models/user_model.dart';
 
 abstract class AuthRepo {
-  Future<UserCredential> lgoinWithEmailAndPassword(
-      String email, String password);
+  Future<NetworkResultState> loginWithEmailAndPassword(
+      {required String email, required String password});
   Future<UserCredential> signupWithEmailAndPassword(
       String email, String password);
   Future forgetUserPassword(String email);
@@ -38,14 +39,14 @@ class ProdAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<UserCredential> lgoinWithEmailAndPassword(
-      String email, String password) async {
+  Future<NetworkResultState> loginWithEmailAndPassword(
+      {required String email, required String password}) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      return authResult;
+      return SuccessState(data: authResult);
     } on FirebaseAuthException catch (e) {
-      throw Exception(_getFirebaseAuthErrorMessage(e));
+      return FailureState(errorMessage: _getFirebaseAuthErrorMessage(e));
     }
   }
 
@@ -82,14 +83,12 @@ class ProdAuthRepo implements AuthRepo {
     await _auth.signOut();
   }
 
- 
-
-    @override
+  @override
   Future<void> deleteUser() async {
-    final FirebaseFirestore firestore =  FirebaseFirestore.instance;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final String taskColectionName = getUserInfo().email!;
     firestore.collection(taskColectionName).doc().delete();
-    
+
     await _auth.currentUser!.delete();
   }
 }
@@ -118,13 +117,13 @@ class DevAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<UserCredential> lgoinWithEmailAndPassword(
-      String email, String password) async {
+  Future<NetworkResultState> loginWithEmailAndPassword(
+      {required String email, required String password}) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(
           email: 'admin@gmail.com',
           password: '123456'); // testing for development
-      return authResult;
+      return SuccessState(data: authResult);
     } on FirebaseAuthException catch (e) {
       throw Exception(_getFirebaseAuthErrorMessage(e));
     }
@@ -160,11 +159,10 @@ class DevAuthRepo implements AuthRepo {
   void signOutUser() async {
     await _auth.signOut();
   }
-   @override
+
+  @override
   Future<void> deleteUser() {
     // TODO: implement deleteUser
     throw UnimplementedError();
   }
-
-
 }
