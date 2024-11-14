@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 import '../../../data/repositories/task_repo/task_repo.dart';
 import '../models/task_model.dart';
- 
+
 part 'task_event.dart';
 part 'task_state.dart';
 

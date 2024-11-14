@@ -13,7 +13,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo authRepo;
   AuthBloc({required this.authRepo}) : super(AuthInitialState()) {
     on<AuthInitialEvent>(_authInitialEvent);
-    on<AuthNavigateToLoginPressedEvent>(_authNavigateToLoginPressedEvent, transformer: droppable());
+    on<AuthNavigateToLoginPressedEvent>(_authNavigateToLoginPressedEvent,
+        transformer: droppable());
     on<AuthNavigateToSignupPressedEvent>(_authNavigateToSignupPressedEvent);
     on<AuthLoginButtonPressedEvent>(_authLoginButtonPressedEvent);
     on<AuthForgetPasswordButtonPressedEvent>(
@@ -40,9 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _authLoginButtonPressedEvent(
       AuthLoginButtonPressedEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
     try {
-      await authRepo.loginWithEmailAndPassword(email :event.email, password :event.password);
-      emit(AuthLoadingState());
+      await authRepo.loginWithEmailAndPassword(
+          email: event.email, password: event.password);
       emit(AuthLoginState());
     } catch (e) {
       emit(AuthLoadedFailureSate(failureMessage: e.toString()));
@@ -51,6 +53,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _authSignupButtonPressedEvent(
       AuthSignupButtonPressedEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+
     try {
       await authRepo.signupWithEmailAndPassword(event.email, event.password);
       emit(AuthSignupState());
@@ -60,7 +64,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _authForgetPasswordButtonPressedEvent(
-      AuthForgetPasswordButtonPressedEvent event, Emitter<AuthState> emit) async{
+      AuthForgetPasswordButtonPressedEvent event,
+      Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+
     try {
       await authRepo.forgetUserPassword(event.email);
       emit(AuthForgetPasswordState());
