@@ -20,7 +20,7 @@ void main() {
       );
 
       blocTest(
-        'Emits AuthLoadedFailureSate when AuthNavigateToLoginPressed event is added',
+        'emits AuthLoadedFailureSate when AuthNavigateToLoginPressed event is added',
         build: () => authBloc.loginFailureState(),
         act: (bloc) =>
             bloc.add(AuthLoginButtonPressedEvent(email: '', password: '')),

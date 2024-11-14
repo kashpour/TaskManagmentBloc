@@ -23,7 +23,7 @@ class AuthTestBloc {
 
   AuthBloc loginFailureState() {
     when(() => _mockAuthRepo.loginWithEmailAndPassword(email: '', password: ''))
-        .thenThrow((_) async => FailureState(errorMessage: 'errorMessage'));
+        .thenAnswer((_) async => FailureState(errorMessage: 'errorMessage'));
     return _authBloc;
   }
 
@@ -35,7 +35,7 @@ class AuthTestBloc {
 
   AuthBloc signupFailureState() {
     when(() => _mockAuthRepo.signupWithEmailAndPassword('', ''))
-        .thenThrow((_) async => FailureState(errorMessage: ''));
+        .thenAnswer((_) async => FailureState(errorMessage: ''));
 
     return _authBloc;
   }
@@ -49,7 +49,7 @@ class AuthTestBloc {
 
   AuthBloc forgetPasswordFailureState() {
     when(() => _mockAuthRepo.forgetUserPassword(''))
-        .thenThrow((_) async => FailureState(errorMessage: ''));
+        .thenAnswer((_) async => FailureState(errorMessage: ''));
     return _authBloc;
   }
 

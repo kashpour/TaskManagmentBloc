@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 
 part 'auth_event.dart';
@@ -43,9 +44,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthLoginButtonPressedEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
     try {
-      await authRepo.loginWithEmailAndPassword(
-          email: event.email, password: event.password);
-      emit(AuthLoginState());
+      final NetworkResultState resutlState =
+          await authRepo.loginWithEmailAndPassword(
+              email: event.email, password: event.password);
+      if (resutlState is SuccessState) {
+        emit(AuthLoginState());
+      } else {
+        emit(AuthLoadedFailureSate(failureMessage: 'error happned'));
+      }
     } catch (e) {
       emit(AuthLoadedFailureSate(failureMessage: e.toString()));
     }
@@ -56,8 +62,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoadingState());
 
     try {
-      await authRepo.signupWithEmailAndPassword(event.email, event.password);
-      emit(AuthSignupState());
+      final NetworkResultState resutlState = await authRepo
+          .signupWithEmailAndPassword(event.email, event.password);
+      if (resutlState is SuccessState) {
+        emit(AuthSignupState());
+      } else {
+        emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
+      }
     } catch (e) {
       emit(AuthLoadedFailureSate(failureMessage: e.toString()));
     }
@@ -69,8 +80,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoadingState());
 
     try {
-      await authRepo.forgetUserPassword(event.email);
-      emit(AuthForgetPasswordState());
+      final NetworkResultState resutlState =
+          await authRepo.forgetUserPassword(event.email);
+      if (resutlState is SuccessState) {
+        emit(AuthForgetPasswordState());
+      } else {
+        emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
+      }
     } catch (e) {
       emit(AuthLoadedFailureSate(failureMessage: e.toString()));
     }
