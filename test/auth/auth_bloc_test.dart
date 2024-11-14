@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
