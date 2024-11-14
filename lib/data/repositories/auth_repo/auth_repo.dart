@@ -7,12 +7,12 @@ import '../../../features/auth/models/user_model.dart';
 abstract class AuthRepo {
   Future<NetworkResultState> loginWithEmailAndPassword(
       {required String email, required String password});
-  Future<UserCredential> signupWithEmailAndPassword(
+  Future<NetworkResultState> signupWithEmailAndPassword(
       String email, String password);
-  Future forgetUserPassword(String email);
+  Future<NetworkResultState> forgetUserPassword(String email);
   UserModel getUserInfo();
-  void signOutUser();
-  Future<void> deleteUser();
+  Future<NetworkResultState> signOutUser();
+  Future<NetworkResultState> deleteUser();
 }
 
 class ProdAuthRepo implements AuthRepo {
@@ -27,14 +27,14 @@ class ProdAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<UserCredential> signupWithEmailAndPassword(
+  Future<NetworkResultState> signupWithEmailAndPassword(
       String email, String password) async {
     try {
       final authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return authResult;
+      return SuccessState(data: authResult);
     } on FirebaseAuthException catch (e) {
-      throw Exception(_getFirebaseAuthErrorMessage(e));
+      return FailureState(errorMessage: _getFirebaseAuthErrorMessage(e));
     }
   }
 
@@ -51,11 +51,12 @@ class ProdAuthRepo implements AuthRepo {
   }
 
   @override
-  Future forgetUserPassword(String email) async {
+  Future<NetworkResultState> forgetUserPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      return SuccessState(data: '');
     } on FirebaseAuthException catch (e) {
-      throw Exception(_getFirebaseAuthErrorMessage(e));
+      return FailureState(errorMessage: _getFirebaseAuthErrorMessage(e));
     }
   }
 
@@ -79,17 +80,26 @@ class ProdAuthRepo implements AuthRepo {
   }
 
   @override
-  void signOutUser() async {
-    await _auth.signOut();
+  Future<NetworkResultState> signOutUser() async {
+    try {
+      await _auth.signOut();
+      return SuccessState(data: '');
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 
   @override
-  Future<void> deleteUser() async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final String taskColectionName = getUserInfo().email!;
-    firestore.collection(taskColectionName).doc().delete();
-
-    await _auth.currentUser!.delete();
+  Future<NetworkResultState> deleteUser() async {
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final String taskColectionName = getUserInfo().email!;
+      firestore.collection(taskColectionName).doc().delete();
+      await _auth.currentUser!.delete();
+      return SuccessState(data: '');
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 }
 
@@ -105,14 +115,14 @@ class DevAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<UserCredential> signupWithEmailAndPassword(
+  Future<NetworkResultState> signupWithEmailAndPassword(
       String email, String password) async {
     try {
       final authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return authResult;
+      return SuccessState(data: authResult);
     } on FirebaseAuthException catch (e) {
-      throw Exception(_getFirebaseAuthErrorMessage(e));
+      return FailureState(errorMessage: _getFirebaseAuthErrorMessage(e));
     }
   }
 
@@ -130,11 +140,12 @@ class DevAuthRepo implements AuthRepo {
   }
 
   @override
-  Future forgetUserPassword(String email) async {
+  Future<NetworkResultState> forgetUserPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      return SuccessState(data: '');
     } on FirebaseAuthException catch (e) {
-      throw Exception(_getFirebaseAuthErrorMessage(e));
+      return FailureState(errorMessage: _getFirebaseAuthErrorMessage(e));
     }
   }
 
@@ -156,13 +167,25 @@ class DevAuthRepo implements AuthRepo {
   }
 
   @override
-  void signOutUser() async {
-    await _auth.signOut();
+  Future<NetworkResultState> signOutUser() async {
+    try {
+      await _auth.signOut();
+      return SuccessState(data: '');
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 
   @override
-  Future<void> deleteUser() {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future<NetworkResultState> deleteUser() async {
+    try {
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final String taskColectionName = getUserInfo().email!;
+      firestore.collection(taskColectionName).doc().delete();
+      await _auth.currentUser!.delete();
+      return SuccessState(data: '');
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 }
