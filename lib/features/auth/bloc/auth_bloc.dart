@@ -43,17 +43,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _authLoginButtonPressedEvent(
       AuthLoginButtonPressedEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
-    try {
-      final NetworkResultState resutlState =
-          await authRepo.loginWithEmailAndPassword(
-              email: event.email, password: event.password);
-      if (resutlState is SuccessState) {
-        emit(AuthLoginState());
-      } else {
-        emit(AuthLoadedFailureSate(failureMessage: 'error happned'));
-      }
-    } catch (e) {
-      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    final NetworkResultState resutlState =
+        await authRepo.loginWithEmailAndPassword(
+            email: event.email, password: event.password);
+    if (resutlState is SuccessState) {
+      emit(AuthLoginState());
+    } else {
+      emit(AuthLoadedFailureSate(failureMessage: 'error happned'));
     }
   }
 
@@ -61,16 +57,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthSignupButtonPressedEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
 
-    try {
-      final NetworkResultState resutlState = await authRepo
-          .signupWithEmailAndPassword(event.email, event.password);
-      if (resutlState is SuccessState) {
-        emit(AuthSignupState());
-      } else {
-        emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
-      }
-    } catch (e) {
-      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    final NetworkResultState resutlState =
+        await authRepo.signupWithEmailAndPassword(event.email, event.password);
+    if (resutlState is SuccessState) {
+      emit(AuthSignupState());
+    } else {
+      emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
     }
   }
 
@@ -79,16 +71,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
 
-    try {
-      final NetworkResultState resutlState =
-          await authRepo.forgetUserPassword(event.email);
-      if (resutlState is SuccessState) {
-        emit(AuthForgetPasswordState());
-      } else {
-        emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
-      }
-    } catch (e) {
-      emit(AuthLoadedFailureSate(failureMessage: e.toString()));
+    final NetworkResultState resutlState =
+        await authRepo.forgetUserPassword(event.email);
+
+    if (resutlState is SuccessState) {
+      emit(AuthForgetPasswordState());
+    } else {
+      emit(AuthLoadedFailureSate(failureMessage: 'error happened'));
     }
   }
 
