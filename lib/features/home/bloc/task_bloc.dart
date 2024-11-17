@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 import '../../../data/repositories/task_repo/task_repo.dart';
@@ -42,20 +43,29 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskFetchTasksEvent(
       TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
     try {
-      final taskStream = taskRepo.loadTask().map((snapshot) {
-        final tasks =
-            snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
-          (element) {
-            return element.isCompleted == event.isTaskCompleteEvent;
-          },
-        ).toList();
-        return TaskLoadedSuccessState(
-            taskModel: tasks,
-            email: authRepo.getUserInfo().email!,
-            userName: authRepo.getUserInfo().username!,
-            isTaskComplete: event.isTaskCompleteEvent);
-      });
-      await emit.forEach(taskStream, onData: (state) => state);
+      final resultState = taskRepo.loadTask();
+
+      if (resultState is SuccessState) {
+        final taskStream = resultState.data.map((snapshot) {
+          final tasks =
+              snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
+            (element) {
+              return element.isCompleted == event.isTaskCompleteEvent;
+            },
+          ).toList();
+          return TaskLoadedSuccessState(
+              taskModel: tasks,
+              email: authRepo.getUserInfo().email!,
+              userName: authRepo.getUserInfo().username!,
+              isTaskComplete: event.isTaskCompleteEvent);
+        });
+        await emit.forEach(
+          taskStream,
+          onData: (data) => state,
+        );
+      } else if (resultState is FailureState) {
+        emit(TaskFailureSate(failureMessage: resultState.errorMessage));
+      }
     } catch (e) {
       emit(TaskFailureSate(failureMessage: e.toString()));
     }

@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
 import 'package:task_managment_bloc/data/repositories/task_repo/task_repo.dart';
 import 'package:task_managment_bloc/features/home/bloc/task_bloc.dart';
@@ -39,8 +39,8 @@ class TaskBlocTest {
           dateTime: 'dateTime 3',
           isCompleted: false),
     ];
-    when(() => _mockTaskRepo.loadTask()).thenAnswer(
-        (_) => Stream.fromIterable(tasks as Iterable<QuerySnapshot<Object?>>));
+    when(() => _mockTaskRepo.loadTask())
+        .thenAnswer((_) => SuccessState(data: tasks));
 
     return _taskBloc;
   }

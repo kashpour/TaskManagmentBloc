@@ -16,7 +16,7 @@ void main() {
         'emits Stream of Tasks when fetch tasks event is added.',
         build: () => taskBlocTest.taskFetchTasks(),
         act: (bloc) => bloc.add(TaskFetchTasksEvent(isTaskCompleteEvent: false)),
-        expect: () => [isA<TaskFailureSate>()],
+        expect: () => [isA<TaskLoadedSuccessState>()],
       );
 
     });
