@@ -59,3 +59,4 @@ class AuthTestBloc {
     return userModel;
   }
 }
+
