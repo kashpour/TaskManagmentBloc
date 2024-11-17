@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
+import '../../../data/data_provider/network/network_result_state.dart';
 
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 import '../../../data/repositories/task_repo/task_repo.dart';

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
+import '../../data_provider/network/network_result_state.dart';
 
 import '../../../features/auth/models/user_model.dart';
 

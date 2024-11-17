@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
+import '../../data_provider/network/network_result_state.dart';
 
 import '../../../features/home/models/task_model.dart';
 import '../auth_repo/auth_repo.dart';

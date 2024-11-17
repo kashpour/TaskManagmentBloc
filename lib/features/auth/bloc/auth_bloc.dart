@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
+import '../../../data/data_provider/network/network_result_state.dart';
 import '../../../data/repositories/auth_repo/auth_repo.dart';
 
 part 'auth_event.dart';
