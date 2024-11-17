@@ -31,4 +31,8 @@ class TaskModel {
       'isCompleted': isCompleted,
     };
   }
+
+  @override
+  String toString() =>
+      'id: $id, title: $title, desc: $description, dateTime: $dateTime, isComleted: $isCompleted';
 }

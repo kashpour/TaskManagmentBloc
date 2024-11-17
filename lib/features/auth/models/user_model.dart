@@ -5,7 +5,5 @@ class UserModel {
   UserModel({required this.email, required this.username});
 
   @override
-  String toString() {
-    return 'email: $email, username: $username';
-  }
+  String toString() => 'email: $email, username: $username';
 }
