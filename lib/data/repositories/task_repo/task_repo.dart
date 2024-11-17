@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 
 import '../../../features/home/models/task_model.dart';
 import '../auth_repo/auth_repo.dart';
 
 abstract class TaskRepo {
   void addTask(TaskModel task);
-  Stream<QuerySnapshot> loadTask();
+  NetworkResultState loadTask();
   void updateTask(TaskModel task, String documnetId);
   void deleteTask(String documnetId);
 }
@@ -24,10 +25,14 @@ class ProdTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<QuerySnapshot> loadTask() {
+  NetworkResultState loadTask() {
     final String taskColectionName = prodAuthRepo.getUserInfo().email!;
-
-    return _firestore.collection(taskColectionName).snapshots();
+    try {
+      final taskStream = _firestore.collection(taskColectionName).snapshots();
+      return SuccessState(data: taskStream);
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 
   @override
@@ -59,8 +64,13 @@ class DevTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<QuerySnapshot> loadTask() {
-    return _firestore.collection(taskColectionName).snapshots();
+  NetworkResultState loadTask() {
+    try {
+      final taskStream = _firestore.collection(taskColectionName).snapshots();
+      return SuccessState(data: taskStream);
+    } catch (e) {
+      return FailureState(errorMessage: e.toString());
+    }
   }
 
   @override
