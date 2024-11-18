@@ -22,7 +22,7 @@ class TaskBlocTest {
     _taskBloc = TaskBloc(authRepo: _mockAuthRepo, taskRepo: _mockTaskRepo);
   }
 
-  TaskBloc taskFetchTasks() {
+  TaskBloc taskFetchTasksSuccessState() {
     final List<TaskModel> tasks = [
       TaskModel(
           title: 'title 1',
@@ -40,8 +40,19 @@ class TaskBlocTest {
           dateTime: 'dateTime 3',
           isCompleted: false),
     ];
-    when(() => _mockTaskRepo.loadTask())
+    when(() => _mockTaskRepo.loadTask(eventIsCompleted: false))
         .thenAnswer((_) => Stream.value(SuccessState(data: tasks)));
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskFetchTasksFailureState() {
+    when(() => _mockTaskRepo.loadTask(eventIsCompleted: false)).thenAnswer(
+        (_) =>
+            Stream.value(FailureState(errorMessage: 'Failed Loading tasks')));
+
     when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
         (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
 

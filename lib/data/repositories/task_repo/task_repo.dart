@@ -6,7 +6,7 @@ import '../auth_repo/auth_repo.dart';
 
 abstract class TaskRepo {
   void addTask(TaskModel task);
-  Stream<NetworkResultState> loadTask(bool eventIsCompleted);
+  Stream<NetworkResultState> loadTask({required bool eventIsCompleted});
   void updateTask(TaskModel task, String documnetId);
   void deleteTask(String documnetId);
 }
@@ -25,7 +25,7 @@ class ProdTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask(bool eventIsCompleted) {
+  Stream<NetworkResultState> loadTask({required bool eventIsCompleted}) {
     final String taskColectionName = prodAuthRepo.getUserInfo().email!;
     try {
       return _firestore
@@ -72,7 +72,7 @@ class DevTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask(bool eventIsCompleted) {
+  Stream<NetworkResultState> loadTask({required bool eventIsCompleted}) {
     try {
       return _firestore
           .collection(taskColectionName)

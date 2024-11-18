@@ -13,10 +13,18 @@ void main() {
     group('Fetching Tasks  ', () {
       blocTest<TaskBloc, TaskState>(
         'emits Stream of Tasks when fetch tasks event is added.',
-        build: () => taskBlocTest.taskFetchTasks(),
+        build: () => taskBlocTest.taskFetchTasksSuccessState(),
         act: (bloc) =>
             bloc.add(TaskFetchTasksEvent(isTaskCompleteEvent: false)),
         expect: () => [isA<TaskLoadedSuccessState>()],
+      );
+
+      blocTest<TaskBloc, TaskState>(
+        'emits Stream of Failure states when fetch tasks event is added.',
+        build: () => taskBlocTest.taskFetchTasksFailureState(),
+        act: (bloc) =>
+            bloc.add(TaskFetchTasksEvent(isTaskCompleteEvent: false)),
+        expect: () => [isA<TaskFailureSate>()],
       );
     });
   });
