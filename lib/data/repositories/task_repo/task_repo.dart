@@ -6,7 +6,7 @@ import '../auth_repo/auth_repo.dart';
 
 abstract class TaskRepo {
   void addTask(TaskModel task);
-  Stream<NetworkResultState> loadTask();
+  Stream<NetworkResultState> loadTask(bool eventIsCompleted);
   void updateTask(TaskModel task, String documnetId);
   void deleteTask(String documnetId);
 }
@@ -25,15 +25,16 @@ class ProdTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask() {
+  Stream<NetworkResultState> loadTask(bool eventIsCompleted) {
     final String taskColectionName = prodAuthRepo.getUserInfo().email!;
     try {
       return _firestore
           .collection(taskColectionName)
           .snapshots()
-          .map((querSnapshot) {
-        final tasks = querSnapshot.docs
+          .map((querySnapshot) {
+        final tasks = querySnapshot.docs
             .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .where((task) => task.isCompleted == eventIsCompleted)
             .toList();
         return SuccessState(data: tasks);
       });
@@ -71,7 +72,7 @@ class DevTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask() {
+  Stream<NetworkResultState> loadTask(bool eventIsCompleted) {
     try {
       return _firestore
           .collection(taskColectionName)
@@ -79,6 +80,7 @@ class DevTaskRepo implements TaskRepo {
           .map((querSnapshot) {
         final tasks = querSnapshot.docs
             .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .where((task) => task.isCompleted == eventIsCompleted)
             .toList();
         return SuccessState(data: tasks);
       });

@@ -43,7 +43,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskFetchTasksEvent(
       TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
     try {
-      final resultStream = taskRepo.loadTask();
+      final resultStream = taskRepo.loadTask(event.isTaskCompleteEvent);
       await emit.forEach<NetworkResultState>(
         resultStream,
         onData: (result) {
