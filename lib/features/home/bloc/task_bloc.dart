@@ -43,29 +43,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   FutureOr<void> _taskFetchTasksEvent(
       TaskFetchTasksEvent event, Emitter<TaskState> emit) async {
     try {
-      final resultState = taskRepo.loadTask();
-
-      if (resultState is SuccessState) {
-        final taskStream = resultState.data.map((snapshot) {
-          final tasks =
-              snapshot.docs.map((doc) => TaskModel.fromJson(doc, doc.id)).where(
-            (element) {
-              return element.isCompleted == event.isTaskCompleteEvent;
-            },
-          ).toList();
-          return TaskLoadedSuccessState(
-              taskModel: tasks,
-              email: authRepo.getUserInfo().email!,
-              userName: authRepo.getUserInfo().username!,
-              isTaskComplete: event.isTaskCompleteEvent);
-        });
-        await emit.forEach(
-          taskStream,
-          onData: (data) => state,
-        );
-      } else if (resultState is FailureState) {
-        emit(TaskFailureSate(failureMessage: resultState.errorMessage));
-      }
+      final resultStream = taskRepo.loadTask();
+      await emit.forEach<NetworkResultState>(
+        resultStream,
+        onData: (result) {
+          if (result is SuccessState) {
+            return TaskLoadedSuccessState(
+                taskModel: result.data,
+                email: authRepo.getUserInfo().email!,
+                userName: authRepo.getUserInfo().username!,
+                isTaskComplete: event.isTaskCompleteEvent);
+          } else if (result is FailureState) {
+            return TaskFailureSate(failureMessage: result.errorMessage);
+          }
+          return TaskFailureSate(
+              failureMessage: (result as FailureState).errorMessage);
+        },
+        onError: (error, stackTrace) {
+          return TaskFailureSate(failureMessage: error.toString());
+        },
+      );
     } catch (e) {
       emit(TaskFailureSate(failureMessage: e.toString()));
     }

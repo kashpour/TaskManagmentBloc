@@ -6,7 +6,7 @@ import '../auth_repo/auth_repo.dart';
 
 abstract class TaskRepo {
   void addTask(TaskModel task);
-  NetworkResultState loadTask();
+  Stream<NetworkResultState> loadTask();
   void updateTask(TaskModel task, String documnetId);
   void deleteTask(String documnetId);
 }
@@ -25,13 +25,20 @@ class ProdTaskRepo implements TaskRepo {
   }
 
   @override
-  NetworkResultState loadTask() {
+  Stream<NetworkResultState> loadTask() {
     final String taskColectionName = prodAuthRepo.getUserInfo().email!;
     try {
-      final taskStream = _firestore.collection(taskColectionName).snapshots();
-      return SuccessState(data: taskStream);
+      return _firestore
+          .collection(taskColectionName)
+          .snapshots()
+          .map((querSnapshot) {
+        final tasks = querSnapshot.docs
+            .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .toList();
+        return SuccessState(data: tasks);
+      });
     } catch (e) {
-      return FailureState(errorMessage: e.toString());
+      return Stream.value(FailureState(errorMessage: e.toString()));
     }
   }
 
@@ -64,12 +71,19 @@ class DevTaskRepo implements TaskRepo {
   }
 
   @override
-  NetworkResultState loadTask() {
+  Stream<NetworkResultState> loadTask() {
     try {
-      final taskStream = _firestore.collection(taskColectionName).snapshots();
-      return SuccessState(data: taskStream);
+      return _firestore
+          .collection(taskColectionName)
+          .snapshots()
+          .map((querSnapshot) {
+        final tasks = querSnapshot.docs
+            .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .toList();
+        return SuccessState(data: tasks);
+      });
     } catch (e) {
-      return FailureState(errorMessage: e.toString());
+      return Stream.value(FailureState(errorMessage: e.toString()));
     }
   }
 
