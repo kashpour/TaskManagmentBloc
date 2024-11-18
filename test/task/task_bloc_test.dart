@@ -2,6 +2,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:task_managment_bloc/data/data_provider/network/network_result_state.dart';
 import 'package:task_managment_bloc/data/repositories/auth_repo/auth_repo.dart';
 import 'package:task_managment_bloc/data/repositories/task_repo/task_repo.dart';
+import 'package:task_managment_bloc/features/auth/models/user_model.dart';
 import 'package:task_managment_bloc/features/home/bloc/task_bloc.dart';
 import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
@@ -40,7 +41,9 @@ class TaskBlocTest {
           isCompleted: false),
     ];
     when(() => _mockTaskRepo.loadTask())
-        .thenAnswer((_) => SuccessState(data: tasks));
+        .thenAnswer((_) => Stream.value(SuccessState(data: tasks)));
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
 
     return _taskBloc;
   }
