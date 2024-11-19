@@ -31,15 +31,16 @@ class ProdTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask() {
+  Stream<NetworkResultState> loadTask({required bool eventIsCompleted}) {
     final String taskColectionName = prodAuthRepo.getUserInfo().email!;
     try {
       return _firestore
           .collection(taskColectionName)
           .snapshots()
-          .map((querSnapshot) {
-        final tasks = querSnapshot.docs
+          .map((querySnapshot) {
+        final tasks = querySnapshot.docs
             .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .where((task) => task.isCompleted == eventIsCompleted)
             .toList();
         return SuccessState(data: tasks);
       });
@@ -93,7 +94,7 @@ class DevTaskRepo implements TaskRepo {
   }
 
   @override
-  Stream<NetworkResultState> loadTask() {
+  Stream<NetworkResultState> loadTask({required bool eventIsCompleted}) {
     try {
       return _firestore
           .collection(taskColectionName)
@@ -101,6 +102,7 @@ class DevTaskRepo implements TaskRepo {
           .map((querSnapshot) {
         final tasks = querSnapshot.docs
             .map((doc) => TaskModel.fromJson(doc, doc.id))
+            .where((task) => task.isCompleted == eventIsCompleted)
             .toList();
         return SuccessState(data: tasks);
       });
