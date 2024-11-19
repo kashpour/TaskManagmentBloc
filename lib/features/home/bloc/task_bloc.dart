@@ -102,8 +102,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   FutureOr<void> _taskUpdatedTaskEvent(
-      TaskUpdatedTaskEvent event, Emitter<TaskState> emit) {
-    taskRepo.updateTask(event.task, event.documentId);
+      TaskUpdatedTaskEvent event, Emitter<TaskState> emit) async {
+    final NetworkResultState resultState =
+        await taskRepo.updateTask(event.task, event.documentId);
+    if (resultState is SuccessState) {
+      return emit(TaskUpdateTaskState());
+    } else {
+      return emit(TaskFailureSate(
+          failureMessage: (resultState as FailureState).errorMessage));
+    }
   }
 
   FutureOr<void> _taskCompletedButtonPressedEvent(
