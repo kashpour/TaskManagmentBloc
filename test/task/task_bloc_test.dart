@@ -81,4 +81,46 @@ class TaskBlocTest {
 
     return _taskBloc;
   }
+
+  TaskBloc taskUpdateTaskSuccessState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.updateTask(any(), any())).thenAnswer(
+      (_) async => SuccessState(data: {}),
+    );
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskUpdateTaskFailureState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.updateTask(any(), any()))
+        .thenAnswer((_) async => FailureState(errorMessage: ''));
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskDeletedTaskSuccessState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.deleteTask(any())).thenAnswer(
+      (_) async => SuccessState(data: {}),
+    );
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskDeleteTaskFailureState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.deleteTask(any()))
+        .thenAnswer((_) async => FailureState(errorMessage: ''));
+
+    return _taskBloc;
+  }
 }

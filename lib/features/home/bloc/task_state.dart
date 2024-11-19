@@ -30,6 +30,8 @@ final class TaskAddNewTaskState extends TaskState {}
 
 final class TaskUpdateTaskState extends TaskState {}
 
+final class TaskDeleteTaskState extends TaskState{}
+
 final class TaskAddNewTaskDialogState extends TaskState {}
 
 final class TaskUpdateTaskDialogState extends TaskState {
