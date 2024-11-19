@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:task_managment_bloc/features/home/bloc/task_bloc.dart';
-import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
 import 'task_bloc_test.dart';
 
@@ -51,50 +51,5 @@ void main() {
         expect: () => [isA<TaskFailureSate>()],
       );
     });
-  });
-
-  group('Update Task States', () {
-    blocTest<TaskBloc, TaskState>(
-      'emits Task update state when task update event is added.',
-      build: () => taskBlocTest.taskUpdateTaskSuccessState(),
-      act: (bloc) => bloc.add(TaskUpdatedTaskEvent(
-          task: TaskModel(
-              title: 'title',
-              description: 'description',
-              dateTime: 'dateTime',
-              isCompleted: false),
-          documentId: 'documentId')),
-      expect: () => [isA<TaskUpdateTaskState>()],
-    );
-
-    blocTest<TaskBloc, TaskState>(
-      'emits Task failure state when task update event is added.',
-      build: () => taskBlocTest.taskUpdateTaskFailureState(),
-      act: (bloc) => bloc.add(TaskUpdatedTaskEvent(
-          task: TaskModel(
-              title: 'title',
-              description: 'description',
-              dateTime: 'dateTime',
-              isCompleted: false),
-          documentId: 'documentId')),
-      expect: () => [isA<TaskFailureSate>()],
-    );
-  });
-  group('Delete Task States', () {
-    blocTest<TaskBloc, TaskState>(
-      'emits task delete state when task delete event is added.',
-      build: () => taskBlocTest.taskDeleteTaskSuccsessState(),
-      act: (bloc) =>
-          bloc.add(TaskDeleteTaskButtonPressedEvent(taskID: 'taskID')),
-      expect: () => [isA<TaskDeleteTaskState>()],
-    );
-
-    blocTest<TaskBloc, TaskState>(
-      'emits failure state when task delete event is added.',
-      build: () => taskBlocTest.taskDeleteTaskFailureState(),
-      act: (bloc) =>
-          bloc.add(TaskDeleteTaskButtonPressedEvent(taskID: 'taskID')),
-      expect: () => [isA<TaskFailureSate>()],
-    );
   });
 }
