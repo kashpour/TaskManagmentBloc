@@ -85,15 +85,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   FutureOr<void> _taskAddNewTaskEvent(
-      TaskAddNewTaskEvent event, Emitter<TaskState> emit) {
+      TaskAddNewTaskEvent event, Emitter<TaskState> emit) async {
     final TaskModel newTask = TaskModel(
       title: event.title,
       description: event.description,
       dateTime: event.dateTime,
       isCompleted: event.isCompleted,
     );
-    taskRepo.addTask(newTask);
-    emit(TaskAddNewTaskState());
+    final NetworkResultState resultState = await taskRepo.addTask(newTask);
+    if (resultState is SuccessState) {
+      return emit(TaskAddNewTaskState());
+    } else {
+      return emit(TaskFailureSate(
+          failureMessage: (resultState as FailureState).errorMessage));
+    }
   }
 
   FutureOr<void> _taskUpdatedTaskEvent(
