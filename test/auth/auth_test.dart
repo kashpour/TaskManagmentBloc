@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:task_managment_bloc/features/auth/bloc/auth_bloc.dart';
 
@@ -66,7 +65,6 @@ void main() {
 
       test('Getting User info', () {
         final userModel = authBloc.getUserInfo();
-        debugPrint(userModel.toString());
         expect(userModel, userModel);
       });
     });
