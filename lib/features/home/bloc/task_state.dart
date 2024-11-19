@@ -5,6 +5,7 @@ sealed class TaskState {}
 
 final class TaskInitial extends TaskState {}
 
+
 final class TaskLoadedSuccessState extends TaskState {
   final List<TaskModel> taskModel;
   final String email;
@@ -29,6 +30,7 @@ final class UserLogOutState extends TaskState {}
 final class TaskAddNewTaskState extends TaskState {}
 
 final class TaskUpdateTaskState extends TaskState {}
+final class TaskDeleteTaskState extends TaskState{}
 
 final class TaskAddNewTaskDialogState extends TaskState {}
 
