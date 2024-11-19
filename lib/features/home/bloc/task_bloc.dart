@@ -75,8 +75,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }
 
   FutureOr<void> _taskDeleteTaskButtonPressedEvent(
-      TaskDeleteTaskButtonPressedEvent event, Emitter<TaskState> emit) {
-    taskRepo.deleteTask(event.taskID);
+      TaskDeleteTaskButtonPressedEvent event, Emitter<TaskState> emit) async {
+    final NetworkResultState resultState =
+        await taskRepo.deleteTask(event.taskID);
+    if (resultState is SuccessState) {
+      return emit(TaskDeleteTaskState());
+    } else {
+      return emit(TaskFailureSate(
+          failureMessage: (resultState as FailureState).errorMessage));
+    }
   }
 
   FutureOr<void> _taskUpdateTaskButtonPressedEvent(

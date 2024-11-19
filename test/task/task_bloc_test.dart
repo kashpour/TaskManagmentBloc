@@ -8,20 +8,19 @@ import 'package:task_managment_bloc/features/home/models/task_model.dart';
 
 class MockTaskRepo extends Mock implements TaskRepo {}
 
-class MockTaskModel extends Fake implements TaskModel {}
+class MockTaskModel extends Mock implements TaskModel {}
 
 class MockAuthRepo extends Mock implements AuthRepo {}
 
 class TaskBlocTest {
   static final MockTaskRepo _mockTaskRepo = MockTaskRepo();
   static final MockAuthRepo _mockAuthRepo = MockAuthRepo();
-  static final MockTaskModel _mockTaskModel = MockTaskModel();
   TaskBloc _taskBloc =
       TaskBloc(authRepo: _mockAuthRepo, taskRepo: _mockTaskRepo);
 
   Future<void> init() async {
     await _taskBloc.close();
-    registerFallbackValue(_mockTaskModel);
+    registerFallbackValue(MockTaskModel());
     _taskBloc = TaskBloc(authRepo: _mockAuthRepo, taskRepo: _mockTaskRepo);
   }
 
@@ -98,6 +97,26 @@ class TaskBlocTest {
         (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
 
     when(() => _mockTaskRepo.updateTask(any(), any()))
+        .thenAnswer((_) async => FailureState(errorMessage: ''));
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskDeleteTaskSuccsessState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.deleteTask(any()))
+        .thenAnswer((_) async => SuccessState(data: {}));
+
+    return _taskBloc;
+  }
+
+  TaskBloc taskDeleteTaskFailureState() {
+    when(() => _mockAuthRepo.getUserInfo()).thenAnswer(
+        (_) => UserModel(email: 'ibrahim@gmail.com', username: 'kashpour'));
+
+    when(() => _mockTaskRepo.deleteTask(any()))
         .thenAnswer((_) async => FailureState(errorMessage: ''));
 
     return _taskBloc;

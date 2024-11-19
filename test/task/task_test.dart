@@ -80,4 +80,21 @@ void main() {
       expect: () => [isA<TaskFailureSate>()],
     );
   });
+  group('Delete Task States', () {
+    blocTest<TaskBloc, TaskState>(
+      'emits task delete state when task delete event is added.',
+      build: () => taskBlocTest.taskDeleteTaskSuccsessState(),
+      act: (bloc) =>
+          bloc.add(TaskDeleteTaskButtonPressedEvent(taskID: 'taskID')),
+      expect: () => [isA<TaskDeleteTaskState>()],
+    );
+
+    blocTest<TaskBloc, TaskState>(
+      'emits failure state when task delete event is added.',
+      build: () => taskBlocTest.taskDeleteTaskFailureState(),
+      act: (bloc) =>
+          bloc.add(TaskDeleteTaskButtonPressedEvent(taskID: 'taskID')),
+      expect: () => [isA<TaskFailureSate>()],
+    );
+  });
 }
